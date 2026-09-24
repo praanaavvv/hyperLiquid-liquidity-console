@@ -1,0 +1,8 @@
+ws_url: wss://api.hyperliquid.xyz/ws
+rest_url: https://api.hyperliquid.xyz/info
+data_dir: data
+# l2Book WS is throttled to ~5.4s (measured); bbo is ~0.1s. See API_FINDINGS.md V3.
+channels: [bbo, l2Book, trades, activeAssetCtx]
+rest_poll_secs:
+  metaAndAssetCtxs: 60
+  meta: 3600

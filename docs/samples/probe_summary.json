@@ -1,0 +1,175 @@
+{
+  "probed_at": "2026-09-24T06:25:25Z",
+  "V6_symbols_with_colon": [],
+  "V6_universe_n": 234,
+  "V6_sample_entry": {
+    "szDecimals": 5,
+    "name": "BTC",
+    "maxLeverage": 40,
+    "marginTableId": 56
+  },
+  "V7_ctx_keys": [
+    "dayBaseVlm",
+    "dayNtlVlm",
+    "funding",
+    "impactPxs",
+    "markPx",
+    "midPx",
+    "openInterest",
+    "oraclePx",
+    "premium",
+    "prevDayPx"
+  ],
+  "V3_rest_levels": [
+    20,
+    20
+  ],
+  "V3_rest_level_shape": {
+    "px": "84133.0",
+    "sz": "0.51192",
+    "n": 4
+  },
+  "V5_burst": {
+    "n": 60,
+    "elapsed_s": 11.35,
+    "rps": 5.3,
+    "non_200": []
+  },
+  "V3_ws": {
+    "msgs_30s": 6,
+    "median_gap_s": 5.323,
+    "levels_per_side": [
+      20,
+      20
+    ]
+  },
+  "V1": {
+    "n_trades_30s": 73,
+    "trade_keys": [
+      "coin",
+      "hash",
+      "px",
+      "side",
+      "sz",
+      "tid",
+      "time",
+      "users"
+    ],
+    "sample_trade": {
+      "coin": "BTC",
+      "side": "A",
+      "px": "84133.0",
+      "sz": "0.02279",
+      "time": 1790231124037,
+      "hash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "tid": 140238147810435,
+      "users": [
+        "0xbb160cb61e694570f9d570f9fcde7c61dd2143ad",
+        "0x48314750d70312eddf7e6b6b7c2852773727839a"
+      ]
+    },
+    "has_addresses": true
+  },
+  "V7_ws": {
+    "msgs_30s": 30,
+    "ctx_keys": [
+      "dayBaseVlm",
+      "dayNtlVlm",
+      "funding",
+      "impactPxs",
+      "markPx",
+      "midPx",
+      "openInterest",
+      "oraclePx",
+      "premium",
+      "prevDayPx"
+    ]
+  },
+  "V2": {
+    "subs_accepted": 200,
+    "attempted": 200,
+    "stop_reason": null
+  },
+  "top20_by_volume": [
+    [
+      "BTC",
+      4148.3
+    ],
+    [
+      "ETH",
+      1453.2
+    ],
+    [
+      "ZEC",
+      821.5
+    ],
+    [
+      "HYPE",
+      740.9
+    ],
+    [
+      "NEAR",
+      457.9
+    ],
+    [
+      "SOL",
+      420.8
+    ],
+    [
+      "XRP",
+      229.3
+    ],
+    [
+      "UNI",
+      99.3
+    ],
+    [
+      "LIT",
+      99.0
+    ],
+    [
+      "PUMP",
+      83.5
+    ],
+    [
+      "TAO",
+      61.4
+    ],
+    [
+      "ENA",
+      53.1
+    ],
+    [
+      "DOGE",
+      47.9
+    ],
+    [
+      "ARB",
+      45.9
+    ],
+    [
+      "PONS",
+      43.9
+    ],
+    [
+      "BCH",
+      42.9
+    ],
+    [
+      "kPEPE",
+      40.9
+    ],
+    [
+      "LTC",
+      40.1
+    ],
+    [
+      "SUI",
+      38.8
+    ],
+    [
+      "ZRO",
+      36.6
+    ]
+  ]
+}

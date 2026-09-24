@@ -1,0 +1,107 @@
+[
+  {
+    "channel": "activeAssetCtx",
+    "data": {
+      "coin": "BTC",
+      "ctx": {
+        "funding": "0.0000040618",
+        "openInterest": "36338.17712",
+        "prevDayPx": "86500.0",
+        "dayNtlVlm": "4148138858.4331078529",
+        "premium": "-0.0004847978",
+        "oraclePx": "84158.8",
+        "markPx": "84119.8",
+        "midPx": "84117.5",
+        "impactPxs": [
+          "84117.0",
+          "84118.0"
+        ],
+        "dayBaseVlm": "48958.83963"
+      }
+    }
+  },
+  {
+    "channel": "activeAssetCtx",
+    "data": {
+      "coin": "BTC",
+      "ctx": {
+        "funding": "0.0000040618",
+        "openInterest": "36338.17712",
+        "prevDayPx": "86500.0",
+        "dayNtlVlm": "4148138858.4331078529",
+        "premium": "-0.0004741088",
+        "oraclePx": "84157.9",
+        "markPx": "84119.6",
+        "midPx": "84117.5",
+        "impactPxs": [
+          "84117.0",
+          "84118.0"
+        ],
+        "dayBaseVlm": "48958.83963"
+      }
+    }
+  },
+  {
+    "channel": "activeAssetCtx",
+    "data": {
+      "coin": "BTC",
+      "ctx": {
+        "funding": "0.0000040596",
+        "openInterest": "36338.17712",
+        "prevDayPx": "86500.0",
+        "dayNtlVlm": "4148138858.4331078529",
+        "premium": "-0.0004729205",
+        "oraclePx": "84157.9",
+        "markPx": "84119.6",
+        "midPx": "84117.5",
+        "impactPxs": [
+          "84117.0",
+          "84118.1"
+        ],
+        "dayBaseVlm": "48958.83963"
+      }
+    }
+  },
+  {
+    "channel": "activeAssetCtx",
+    "data": {
+      "coin": "BTC",
+      "ctx": {
+        "funding": "0.0000040596",
+        "openInterest": "36338.17712",
+        "prevDayPx": "86500.0",
+        "dayNtlVlm": "4148140803.2960276604",
+        "premium": "-0.0004729205",
+        "oraclePx": "84157.9",
+        "markPx": "84119.6",
+        "midPx": "84117.5",
+        "impactPxs": [
+          "84117.0",
+          "84118.1"
+        ],
+        "dayBaseVlm": "48958.86276"
+      }
+    }
+  },
+  {
+    "channel": "activeAssetCtx",
+    "data": {
+      "coin": "BTC",
+      "ctx": {
+        "funding": "0.0000040596",
+        "openInterest": "36338.17806",
+        "prevDayPx": "86500.0",
+        "dayNtlVlm": "4148140883.1758275032",
+        "premium": "-0.0005037999",
+        "oraclePx": "84160.4",
+        "markPx": "84120.0",
+        "midPx": "84117.5",
+        "impactPxs": [
+          "84117.0",
+          "84118.0"
+        ],
+        "dayBaseVlm": "48958.86371"
+      }
+    }
+  }
+]

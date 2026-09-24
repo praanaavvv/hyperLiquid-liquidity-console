@@ -1,0 +1,1248 @@
+[
+  {
+    "coin": "BTC",
+    "vol24h_usd": 4148334545.4446282,
+    "oi": 36336.15742,
+    "szDecimals": 5,
+    "maxLeverage": 40
+  },
+  {
+    "coin": "ETH",
+    "vol24h_usd": 1453171384.55538,
+    "oi": 1075050.3618000003,
+    "szDecimals": 4,
+    "maxLeverage": 25
+  },
+  {
+    "coin": "ZEC",
+    "vol24h_usd": 821488453.3169996,
+    "oi": 479300.96,
+    "szDecimals": 2,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "HYPE",
+    "vol24h_usd": 740879094.0044103,
+    "oi": 20897091.18,
+    "szDecimals": 2,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "NEAR",
+    "vol24h_usd": 457938951.3050599,
+    "oi": 78573179.80000001,
+    "szDecimals": 1,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "SOL",
+    "vol24h_usd": 420774509.2254001,
+    "oi": 6020034.339999998,
+    "szDecimals": 2,
+    "maxLeverage": 20
+  },
+  {
+    "coin": "XRP",
+    "vol24h_usd": 229269549.24809998,
+    "oi": 179692436.0,
+    "szDecimals": 0,
+    "maxLeverage": 20
+  },
+  {
+    "coin": "UNI",
+    "vol24h_usd": 99290662.20436998,
+    "oi": 12351191.4,
+    "szDecimals": 1,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "LIT",
+    "vol24h_usd": 98992538.40579998,
+    "oi": 45114526.0,
+    "szDecimals": 0,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "PUMP",
+    "vol24h_usd": 83516368.37107497,
+    "oi": 39161609146.0,
+    "szDecimals": 0,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "TAO",
+    "vol24h_usd": 61413384.37920002,
+    "oi": 276252.754,
+    "szDecimals": 3,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "ENA",
+    "vol24h_usd": 53096940.768929996,
+    "oi": 498374124.0,
+    "szDecimals": 0,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "DOGE",
+    "vol24h_usd": 47913449.532853015,
+    "oi": 1182546206.0,
+    "szDecimals": 0,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "ARB",
+    "vol24h_usd": 45870617.054846965,
+    "oi": 154259722.0,
+    "szDecimals": 1,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "PONS",
+    "vol24h_usd": 43907641.43392997,
+    "oi": 99928176.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "BCH",
+    "vol24h_usd": 42917204.36726002,
+    "oi": 38893.024,
+    "szDecimals": 3,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "kPEPE",
+    "vol24h_usd": 40923447.41624801,
+    "oi": 9187215364.0,
+    "szDecimals": 0,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "LTC",
+    "vol24h_usd": 40108123.610040046,
+    "oi": 619385.2400000001,
+    "szDecimals": 2,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "SUI",
+    "vol24h_usd": 38760129.18755201,
+    "oi": 65476887.800000004,
+    "szDecimals": 1,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "ZRO",
+    "vol24h_usd": 36609740.615250014,
+    "oi": 37850296.0,
+    "szDecimals": 1,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "XPL",
+    "vol24h_usd": 35273304.159413,
+    "oi": 707244560.0,
+    "szDecimals": 0,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "VVV",
+    "vol24h_usd": 31622911.31676,
+    "oi": 2206562.0999999996,
+    "szDecimals": 2,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "FARTCOIN",
+    "vol24h_usd": 27676020.608821,
+    "oi": 212486006.4,
+    "szDecimals": 1,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "XMR",
+    "vol24h_usd": 26321619.926239993,
+    "oi": 157223.046,
+    "szDecimals": 3,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "WLD",
+    "vol24h_usd": 25239755.012157,
+    "oi": 99328146.2,
+    "szDecimals": 1,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "AAVE",
+    "vol24h_usd": 24439326.10240001,
+    "oi": 519699.48,
+    "szDecimals": 2,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "PENGU",
+    "vol24h_usd": 22297310.95209501,
+    "oi": 1769632430.0,
+    "szDecimals": 0,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "AVAX",
+    "vol24h_usd": 21079761.88471,
+    "oi": 3069066.4000000004,
+    "szDecimals": 2,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "USELESS",
+    "vol24h_usd": 20930774.53402,
+    "oi": 48638216.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "NIL",
+    "vol24h_usd": 20589919.163389,
+    "oi": 99133636.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "TRUMP",
+    "vol24h_usd": 18571371.09658,
+    "oi": 5878221.400000001,
+    "szDecimals": 1,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "ONDO",
+    "vol24h_usd": 18201655.753559995,
+    "oi": 82900898.0,
+    "szDecimals": 0,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "LINK",
+    "vol24h_usd": 17467352.42699999,
+    "oi": 6137215.2,
+    "szDecimals": 1,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "CRV",
+    "vol24h_usd": 15801841.769213006,
+    "oi": 63219616.400000006,
+    "szDecimals": 1,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "SPX",
+    "vol24h_usd": 12388639.059529996,
+    "oi": 22151036.200000007,
+    "szDecimals": 1,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "CASHCAT",
+    "vol24h_usd": 11774342.834470006,
+    "oi": 262456482.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "MET",
+    "vol24h_usd": 11482508.021089997,
+    "oi": 12928202.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "WIF",
+    "vol24h_usd": 11155707.424390003,
+    "oi": 33380744.0,
+    "szDecimals": 0,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "BNB",
+    "vol24h_usd": 11038383.838810002,
+    "oi": 66905.724,
+    "szDecimals": 3,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "kBONK",
+    "vol24h_usd": 9296877.761903005,
+    "oi": 3090063146.0,
+    "szDecimals": 0,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "INJ",
+    "vol24h_usd": 8947442.62954,
+    "oi": 3483811.5999999996,
+    "szDecimals": 1,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "JUP",
+    "vol24h_usd": 8637199.580059992,
+    "oi": 50186212.0,
+    "szDecimals": 0,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "ASTER",
+    "vol24h_usd": 8119924.30341,
+    "oi": 35040760.0,
+    "szDecimals": 0,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "ADA",
+    "vol24h_usd": 8006456.551169997,
+    "oi": 167696376.0,
+    "szDecimals": 0,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "MON",
+    "vol24h_usd": 7660680.658027997,
+    "oi": 1396018562.0,
+    "szDecimals": 0,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "GRAM",
+    "vol24h_usd": 7519698.2327999985,
+    "oi": 25550428.0,
+    "szDecimals": 0,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "AERO",
+    "vol24h_usd": 7377699.820070003,
+    "oi": 34531010.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "PENDLE",
+    "vol24h_usd": 6511308.739000001,
+    "oi": 5613208.0,
+    "szDecimals": 0,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "VIRTUAL",
+    "vol24h_usd": 6021467.133915002,
+    "oi": 13028624.2,
+    "szDecimals": 1,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "ICP",
+    "vol24h_usd": 5850457.3192799995,
+    "oi": 1440566.8,
+    "szDecimals": 1,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "APT",
+    "vol24h_usd": 5641372.899822,
+    "oi": 6024460.5200000005,
+    "szDecimals": 2,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "RENDER",
+    "vol24h_usd": 5220712.465560001,
+    "oi": 1777210.2,
+    "szDecimals": 1,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "ETHFI",
+    "vol24h_usd": 5102531.746883,
+    "oi": 26550227.6,
+    "szDecimals": 1,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "DASH",
+    "vol24h_usd": 5069406.34012,
+    "oi": 62978.64,
+    "szDecimals": 2,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "TIA",
+    "vol24h_usd": 4351021.350394998,
+    "oi": 11431301.799999999,
+    "szDecimals": 1,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "GRASS",
+    "vol24h_usd": 4323881.593969,
+    "oi": 40985153.8,
+    "szDecimals": 1,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "STRK",
+    "vol24h_usd": 4288582.216074999,
+    "oi": 211570729.4,
+    "szDecimals": 1,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "PURR",
+    "vol24h_usd": 3885721.44212,
+    "oi": 126548672.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "PAXG",
+    "vol24h_usd": 3469073.1251000008,
+    "oi": 5268.322,
+    "szDecimals": 3,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "XLM",
+    "vol24h_usd": 3458779.8192499997,
+    "oi": 59442376.0,
+    "szDecimals": 0,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "MORPHO",
+    "vol24h_usd": 3436538.890049999,
+    "oi": 2711218.8,
+    "szDecimals": 1,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "JTO",
+    "vol24h_usd": 3426007.704539999,
+    "oi": 12403098.0,
+    "szDecimals": 0,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "LDO",
+    "vol24h_usd": 3153741.5168979988,
+    "oi": 26061138.2,
+    "szDecimals": 1,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "DOT",
+    "vol24h_usd": 2987464.386019999,
+    "oi": 4951535.8,
+    "szDecimals": 1,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "TRX",
+    "vol24h_usd": 2696217.90387,
+    "oi": 35469558.0,
+    "szDecimals": 0,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "FIL",
+    "vol24h_usd": 2670470.6417039987,
+    "oi": 6400140.2,
+    "szDecimals": 1,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "HBAR",
+    "vol24h_usd": 2665646.724247002,
+    "oi": 76349018.0,
+    "szDecimals": 0,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "ATOM",
+    "vol24h_usd": 2456459.2617289987,
+    "oi": 2311598.04,
+    "szDecimals": 2,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "FET",
+    "vol24h_usd": 2435357.7576899994,
+    "oi": 45989788.0,
+    "szDecimals": 0,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "CHIP",
+    "vol24h_usd": 2423665.26337,
+    "oi": 291093950.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "OP",
+    "vol24h_usd": 2338932.195562,
+    "oi": 29370551.6,
+    "szDecimals": 1,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "POL",
+    "vol24h_usd": 2261023.800269999,
+    "oi": 68946722.0,
+    "szDecimals": 0,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "AR",
+    "vol24h_usd": 2142105.1911420003,
+    "oi": 1070433.12,
+    "szDecimals": 2,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "EIGEN",
+    "vol24h_usd": 2110631.4796970002,
+    "oi": 17833111.98,
+    "szDecimals": 2,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "SEI",
+    "vol24h_usd": 1985394.003901,
+    "oi": 65848652.0,
+    "szDecimals": 0,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "SKY",
+    "vol24h_usd": 1942463.969821001,
+    "oi": 56432262.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "KAITO",
+    "vol24h_usd": 1644851.9308099987,
+    "oi": 5997058.0,
+    "szDecimals": 0,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "ETC",
+    "vol24h_usd": 1568677.6606729992,
+    "oi": 349399.3,
+    "szDecimals": 2,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "kSHIB",
+    "vol24h_usd": 1567160.3292779997,
+    "oi": 642844420.0,
+    "szDecimals": 0,
+    "maxLeverage": 10
+  },
+  {
+    "coin": "ZEN",
+    "vol24h_usd": 1519768.531673,
+    "oi": 293388.54,
+    "szDecimals": 2,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "SYRUP",
+    "vol24h_usd": 1489632.24622,
+    "oi": 30779672.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "ACE",
+    "vol24h_usd": 1405510.5658819997,
+    "oi": 1831243.4,
+    "szDecimals": 2,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "SKR",
+    "vol24h_usd": 1336537.839416,
+    "oi": 73423270.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "CC",
+    "vol24h_usd": 1302291.8573299998,
+    "oi": 36833690.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "PYTH",
+    "vol24h_usd": 1189283.3475819991,
+    "oi": 25772606.0,
+    "szDecimals": 0,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "APE",
+    "vol24h_usd": 1157545.331245,
+    "oi": 12377146.2,
+    "szDecimals": 1,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "WLFI",
+    "vol24h_usd": 1140354.2878130001,
+    "oi": 182374730.0,
+    "szDecimals": 0,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "MEGA",
+    "vol24h_usd": 1080596.5855460004,
+    "oi": 158831908.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "ALGO",
+    "vol24h_usd": 1024593.9538800005,
+    "oi": 28232730.0,
+    "szDecimals": 0,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "BOME",
+    "vol24h_usd": 1009027.5012689995,
+    "oi": 4173287910.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "RUNE",
+    "vol24h_usd": 970790.1311280003,
+    "oi": 2865378.6,
+    "szDecimals": 1,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "CAKE",
+    "vol24h_usd": 866230.06,
+    "oi": 1342020.8,
+    "szDecimals": 1,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "KAS",
+    "vol24h_usd": 861183.4444439999,
+    "oi": 65579364.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "BERA",
+    "vol24h_usd": 789136.8566040003,
+    "oi": 9075456.2,
+    "szDecimals": 1,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "MINA",
+    "vol24h_usd": 743580.7876000004,
+    "oi": 25031264.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "MNT",
+    "vol24h_usd": 715561.3664539998,
+    "oi": 9830683.0,
+    "szDecimals": 1,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "SUPER",
+    "vol24h_usd": 689787.0821299996,
+    "oi": 3471884.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "POPCAT",
+    "vol24h_usd": 664296.6484079997,
+    "oi": 49475484.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "BSV",
+    "vol24h_usd": 649020.4922100003,
+    "oi": 56266.28,
+    "szDecimals": 2,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "STX",
+    "vol24h_usd": 633342.806713,
+    "oi": 3491218.2,
+    "szDecimals": 1,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "ZETA",
+    "vol24h_usd": 609758.8052500003,
+    "oi": 22504809.8,
+    "szDecimals": 1,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "0G",
+    "vol24h_usd": 597961.3997900002,
+    "oi": 10632512.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "ZK",
+    "vol24h_usd": 579284.3087650004,
+    "oi": 47924656.0,
+    "szDecimals": 0,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "MELANIA",
+    "vol24h_usd": 496622.414686,
+    "oi": 14986016.0,
+    "szDecimals": 1,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "W",
+    "vol24h_usd": 483065.3284700003,
+    "oi": 154255026.20000002,
+    "szDecimals": 1,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "kNEIRO",
+    "vol24h_usd": 472480.771408,
+    "oi": 1168245.8,
+    "szDecimals": 1,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "FOGO",
+    "vol24h_usd": 472108.6003099998,
+    "oi": 84044718.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "AVNT",
+    "vol24h_usd": 459400.77053,
+    "oi": 5643104.0,
+    "szDecimals": 0,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "ENS",
+    "vol24h_usd": 439532.3718069998,
+    "oi": 431050.48,
+    "szDecimals": 2,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "S",
+    "vol24h_usd": 426323.7572889999,
+    "oi": 23875878.0,
+    "szDecimals": 0,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "PNUT",
+    "vol24h_usd": 418532.7182839999,
+    "oi": 28698295.2,
+    "szDecimals": 1,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "REZ",
+    "vol24h_usd": 396165.7981040001,
+    "oi": 351630282.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "CFX",
+    "vol24h_usd": 395356.137518,
+    "oi": 59600574.0,
+    "szDecimals": 0,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "BIO",
+    "vol24h_usd": 382927.086832,
+    "oi": 22869752.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "kFLOKI",
+    "vol24h_usd": 377658.2641879998,
+    "oi": 16333742.0,
+    "szDecimals": 0,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "IO",
+    "vol24h_usd": 374760.3171599999,
+    "oi": 6647158.4,
+    "szDecimals": 1,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "SUSHI",
+    "vol24h_usd": 365381.1119160002,
+    "oi": 2005621.2000000002,
+    "szDecimals": 1,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "LINEA",
+    "vol24h_usd": 363153.495379,
+    "oi": 938261918.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "HEMI",
+    "vol24h_usd": 355846.347548,
+    "oi": 146449078.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "ZORA",
+    "vol24h_usd": 328880.2852919999,
+    "oi": 187664372.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "SOPH",
+    "vol24h_usd": 326345.1694320001,
+    "oi": 125429612.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "BANANA",
+    "vol24h_usd": 317724.55003,
+    "oi": 45947.4,
+    "szDecimals": 1,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "MERL",
+    "vol24h_usd": 317021.4637520002,
+    "oi": 17169984.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "HMSTR",
+    "vol24h_usd": 308765.5821140002,
+    "oi": 8801233366.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "SAGA",
+    "vol24h_usd": 308406.4864840001,
+    "oi": 47596732.0,
+    "szDecimals": 1,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "BRETT",
+    "vol24h_usd": 304989.459343,
+    "oi": 50420584.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "2Z",
+    "vol24h_usd": 302593.9329119999,
+    "oi": 13847464.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "GOAT",
+    "vol24h_usd": 302282.994851,
+    "oi": 82513506.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "MOODENG",
+    "vol24h_usd": 301454.7007800001,
+    "oi": 9144712.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "NEO",
+    "vol24h_usd": 300106.897556,
+    "oi": 119089.02,
+    "szDecimals": 2,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "IMX",
+    "vol24h_usd": 298873.8951280001,
+    "oi": 23147858.0,
+    "szDecimals": 1,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "STABLE",
+    "vol24h_usd": 298018.9684389999,
+    "oi": 35888182.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "SNX",
+    "vol24h_usd": 297933.4046759998,
+    "oi": 1639128.8,
+    "szDecimals": 1,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "GRIFFAIN",
+    "vol24h_usd": 290267.0450009999,
+    "oi": 75445262.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "PROVE",
+    "vol24h_usd": 284149.2891100001,
+    "oi": 834246.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "DYDX",
+    "vol24h_usd": 272964.9969659999,
+    "oi": 16371650.8,
+    "szDecimals": 1,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "XAI",
+    "vol24h_usd": 271785.3328559999,
+    "oi": 50782565.400000006,
+    "szDecimals": 1,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "kLUNC",
+    "vol24h_usd": 265374.709935,
+    "oi": 5116732.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "AXS",
+    "vol24h_usd": 262614.27204,
+    "oi": 225058.6,
+    "szDecimals": 1,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "COMP",
+    "vol24h_usd": 258530.39174,
+    "oi": 35705.48,
+    "szDecimals": 2,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "STBL",
+    "vol24h_usd": 245436.432849,
+    "oi": 72241324.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "SAND",
+    "vol24h_usd": 229982.768317,
+    "oi": 12929268.0,
+    "szDecimals": 0,
+    "maxLeverage": 5
+  },
+  {
+    "coin": "APEX",
+    "vol24h_usd": 226490.04036,
+    "oi": 11382168.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "ALT",
+    "vol24h_usd": 226137.244188,
+    "oi": 122713022.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "GALA",
+    "vol24h_usd": 218876.6990629999,
+    "oi": 172953564.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "DYM",
+    "vol24h_usd": 218424.648086,
+    "oi": 19724187.6,
+    "szDecimals": 1,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "WCT",
+    "vol24h_usd": 217984.1695979999,
+    "oi": 1910390.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "PEOPLE",
+    "vol24h_usd": 212064.509884,
+    "oi": 39622716.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "ORDI",
+    "vol24h_usd": 208859.42029,
+    "oi": 137964.14,
+    "szDecimals": 2,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "UMA",
+    "vol24h_usd": 199282.892571,
+    "oi": 918566.0000000001,
+    "szDecimals": 1,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "RESOLV",
+    "vol24h_usd": 197619.400256,
+    "oi": 55631362.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "AZTEC",
+    "vol24h_usd": 196119.975391,
+    "oi": 62893614.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "GMX",
+    "vol24h_usd": 195532.7038979999,
+    "oi": 109847.34,
+    "szDecimals": 2,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "BLUR",
+    "vol24h_usd": 180803.034684,
+    "oi": 66675152.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "AIXBT",
+    "vol24h_usd": 166608.2476790001,
+    "oi": 16019150.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "IOTA",
+    "vol24h_usd": 164608.585746,
+    "oi": 20275966.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "TURBO",
+    "vol24h_usd": 157684.292158,
+    "oi": 263780680.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "POLYX",
+    "vol24h_usd": 156387.482063,
+    "oi": 1127900.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "USUAL",
+    "vol24h_usd": 156200.492982,
+    "oi": 28490871.0,
+    "szDecimals": 1,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "BABY",
+    "vol24h_usd": 149661.3029439999,
+    "oi": 10467386.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "HYPER",
+    "vol24h_usd": 138897.946694,
+    "oi": 907416.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "YGG",
+    "vol24h_usd": 132373.792056,
+    "oi": 6539404.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "CELO",
+    "vol24h_usd": 119436.749771,
+    "oi": 2253746.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "BIGTIME",
+    "vol24h_usd": 118864.500537,
+    "oi": 15070428.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "MOVE",
+    "vol24h_usd": 116790.811421,
+    "oi": 22023804.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "INIT",
+    "vol24h_usd": 115928.213217,
+    "oi": 3521436.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "NXPC",
+    "vol24h_usd": 114357.2043,
+    "oi": 1548686.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "TRB",
+    "vol24h_usd": 106775.45387,
+    "oi": 23932.06,
+    "szDecimals": 2,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "ME",
+    "vol24h_usd": 100718.835787,
+    "oi": 3123696.0,
+    "szDecimals": 1,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "ANIME",
+    "vol24h_usd": 98763.998896,
+    "oi": 84209286.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "LAYER",
+    "vol24h_usd": 96459.174438,
+    "oi": 7777188.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "MEME",
+    "vol24h_usd": 90914.288994,
+    "oi": 867506322.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "MANTA",
+    "vol24h_usd": 90272.864019,
+    "oi": 6177748.399999999,
+    "szDecimals": 1,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "RSR",
+    "vol24h_usd": 78456.263325,
+    "oi": 98271764.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "GAS",
+    "vol24h_usd": 78330.1825800001,
+    "oi": 73470.0,
+    "szDecimals": 1,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "GMT",
+    "vol24h_usd": 75332.35271,
+    "oi": 12403064.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "TNSR",
+    "vol24h_usd": 52291.576933,
+    "oi": 1539608.0,
+    "szDecimals": 1,
+    "maxLeverage": 3
+  },
+  {
+    "coin": "NOT",
+    "vol24h_usd": 49256.981654,
+    "oi": 322588730.0,
+    "szDecimals": 0,
+    "maxLeverage": 3
+  }
+]

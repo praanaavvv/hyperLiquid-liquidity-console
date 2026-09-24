@@ -1,0 +1,28 @@
+# FROZEN 2026-09-24. Selected by ranking metaAndAssetCtxs 24h notional volume.
+# Ranking snapshot: docs/samples/volume_ranking.json (native), see API_FINDINGS.md for HIP-3.
+selected_at: 2026-09-24
+selection_basis: dayNtlVlm from metaAndAssetCtxs, native universe (178 markets, all non-zero volume)
+
+tiers:
+  t1_majors:        # ranks 1, 2, 6
+    - BTC
+    - ETH
+    - SOL
+  t2_mid:           # ranks 8-12
+    - UNI
+    - LIT
+    - PUMP
+    - TAO
+    - ENA
+  t3_longtail:      # ranks ~150-175, thin but non-zero
+    - RESOLV
+    - CELO
+    - GAS
+  t4_hip3:          # builder-deployed; 3 different deployers on purpose.
+    - xyz:SP500     # largest HIP-3 market overall ($247M/24h)
+    - io:SNDK       # largest on the io dex ($15.6M/24h)
+    - mkts:US500    # largest on mkts ($9.5M/24h); same underlying as xyz:SP500
+                    # -> direct depth comparison across two deployers, same index.
+
+# dex routing: HIP-3 coins need {"dex": "<prefix>"} on meta/metaAndAssetCtxs.
+# WS subscriptions use the full prefixed name and need no dex field.

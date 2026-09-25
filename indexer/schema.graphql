@@ -1,0 +1,62 @@
+# One row per CoreWriter RawAction: a HyperEVM account telling HyperCore to do something.
+# These are requests. HyperCore can still reject them, so nothing here is a fill.
+type CoreAction {
+  id: ID! # block_logIndex
+  sender: String! @index # EVM address that called CoreWriter
+  actionId: Int! @index
+  action: String! @index
+  block: Int! @index
+  timestamp: Int! @index
+  txHash: String!
+  # Set for limit orders and cancels. asset: perp index, 10000+i spot, 100000+dex*10000+i HIP-3
+  asset: Int @index
+  isBuy: Boolean
+  limitPx: Float
+  sz: Float # null when sent as "any size"
+  market: Boolean # limit price sent as "any price"
+  notional: Float # requested limitPx * sz, null for market or unbounded orders
+  tif: String
+  reduceOnly: Boolean
+  cloid: String
+  args: String! # every decoded field as JSON
+  decoded: Boolean!
+}
+
+type ActionStat {
+  id: ID! # actionId
+  actionId: Int!
+  action: String!
+  count: Int!
+  lastBlock: Int!
+}
+
+type Sender {
+  id: ID! # EVM address
+  actions: Int!
+  orders: Int!
+  firstBlock: Int!
+  lastBlock: Int!
+}
+
+# HYPE sent from HyperEVM into HyperCore
+type HypeDeposit {
+  id: ID!
+  user: String! @index
+  amountWei: BigInt!
+  amount: Float!
+  block: Int! @index
+  timestamp: Int! @index
+  txHash: String!
+}
+
+type Totals {
+  id: ID! # "all"
+  actions: Int!
+  orders: Int!
+  marketOrders: Int!
+  senders: Int!
+  hypeDeposits: Int!
+  hypeIn: Float!
+  lastBlock: Int!
+  lastTimestamp: Int!
+}

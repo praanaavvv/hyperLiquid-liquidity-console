@@ -5,11 +5,15 @@ real parquet collector is built. Raw payloads are loss-free, so nothing
 collected here is wasted: M2 replays these files.
 
 Usage: uv run --python 3.11 collector/crude.py BTC xyz:SP500
+Retention: date= dirs older than HL_KEEP_DAYS (default 7) are deleted on each hour roll.
 """
 import asyncio
 import json
+import os
+import shutil
 import sys
 import time
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 import websockets
@@ -17,6 +21,22 @@ import websockets
 WS = "wss://api.hyperliquid.xyz/ws"
 CHANNELS = ("bbo", "l2Book", "trades", "activeAssetCtx")
 ROOT = Path(__file__).resolve().parents[1] / "data" / "crude"
+KEEP_DAYS = int(os.environ.get("HL_KEEP_DAYS", 7))
+
+
+def prune(root: Path, keep_days: int, today: date | None = None) -> list[Path]:
+    """Delete coin=*/date=YYYY-MM-DD dirs older than keep_days (UTC). Returns what was removed."""
+    cutoff = (today or datetime.now(timezone.utc).date()) - timedelta(days=keep_days)
+    gone = []
+    for d in root.glob("coin=*/date=*"):
+        try:
+            day = date.fromisoformat(d.name.removeprefix("date="))
+        except ValueError:
+            continue
+        if day < cutoff:
+            shutil.rmtree(d)
+            gone.append(d)
+    return gone
 
 
 def path_for(coin: str, hour_epoch: int) -> Path:
@@ -71,6 +91,7 @@ async def run(coins: list[str]) -> None:
             f.write(json.dumps(rec) + "\n")
         print(json.dumps(rec), flush=True)
 
+    last_prune = -1
     backoff = 1
     while True:
         try:
@@ -96,6 +117,11 @@ async def run(coins: list[str]) -> None:
                         continue
                     w.write(coin, {"ts_local_ns": ts, "channel": ch, "data": data})
                     n += 1
+                    hour = int(time.time()) // 3600
+                    if hour != last_prune:
+                        last_prune = hour
+                        if gone := prune(ROOT, KEEP_DAYS):
+                            log("pruned", dirs=[str(d.relative_to(ROOT)) for d in gone])
                     if time.time() - last_flush > 5:
                         w.flush()
                         last_flush = time.time()

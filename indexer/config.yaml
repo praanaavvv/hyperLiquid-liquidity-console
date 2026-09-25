@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=./node_modules/envio/evm.schema.json
+# HyperEVM -> HyperCore boundary. Envio sees HyperEVM (chain 999) only: HyperCore's
+# order book, fills and funding are not EVM data. What it can see is every action a
+# HyperEVM account sends into HyperCore (CoreWriter) and HYPE bridged into Core.
+name: hl-hyperevm-indexer
+description: Actions HyperEVM contracts send to HyperCore
+contracts:
+  - name: CoreWriter
+    events:
+      - event: "RawAction(address indexed user, bytes data)"
+  - name: HypeSystem
+    events:
+      - event: "Received(address indexed user, uint256 amount)"
+chains:
+  - id: 999 # HyperEVM mainnet, served by HyperSync
+    start_block: 0
+    contracts:
+      - name: CoreWriter
+        address: "0x3333333333333333333333333333333333333333"
+      - name: HypeSystem
+        address: "0x2222222222222222222222222222222222222222"

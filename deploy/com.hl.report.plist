@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- launchd: rebuild web/report.js hourly. -->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.hl.report</string>
+  <key>WorkingDirectory</key><string>__REPO__</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>__UV__</string><string>run</string><string>--python</string><string>3.11</string><string>--quiet</string>
+    <string>analytics/report.py</string>
+  </array>
+  <key>RunAtLoad</key><true/>
+  <key>StartInterval</key><integer>3600</integer>
+  <key>StandardOutPath</key><string>__REPO__/data/report.log</string>
+  <key>StandardErrorPath</key><string>__REPO__/data/report.log</string>
+</dict>
+</plist>

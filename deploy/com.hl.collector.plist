@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- launchd: start at login, restart on any exit. Install: see README "Run". -->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.hl.collector</string>
+  <key>WorkingDirectory</key><string>__REPO__</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>__UV__</string><string>run</string><string>--python</string><string>3.11</string><string>--quiet</string>
+    <string>collector/crude.py</string>
+    <string>BTC</string><string>ETH</string><string>SOL</string><string>UNI</string><string>LIT</string><string>PUMP</string><string>TAO</string><string>ENA</string><string>RESOLV</string><string>CELO</string><string>GAS</string><string>xyz:SP500</string><string>io:SNDK</string><string>mkts:US500</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict><key>HL_KEEP_DAYS</key><string>7</string></dict>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>ThrottleInterval</key><integer>10</integer>
+  <key>StandardOutPath</key><string>__REPO__/data/collector.log</string>
+  <key>StandardErrorPath</key><string>__REPO__/data/collector.log</string>
+</dict>
+</plist>

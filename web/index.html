@@ -1,0 +1,1025 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HL Liquidity Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wdth,wght@75..112.5,400..600&display=swap" rel="stylesheet">
+<style>
+/* Riso print desk: flat spot inks on cool paper. Single light world by design. */
+:root {
+  color-scheme: light;
+  --paper: #eef0f5; --card: #fafbfd; --ink: #17172b; --ink2: #4a4a63; --ink3: #74758c; --hair: #17172b1f;
+  --blue: #2f5bea; --pink: #f0437f; --pink-ink: #c9275f; --amber: #c78a00; --sun: #ffc53d; --teal: #0e9f86;
+  --blue-t: #dce4fd; --pink-t: #fddde8; --sun-t: #fff0c7; --teal-t: #d3f1ea;
+  --display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body: "Instrument Sans", "Helvetica Neue", system-ui, sans-serif;
+  --mono: "Martian Mono", ui-monospace, Menlo, monospace;
+}
+* { box-sizing: border-box; }
+html { background: var(--paper); }
+body {
+  margin: 0; color: var(--ink); font: 15px/1.5 var(--body); padding: 0 clamp(16px, 3vw, 40px) 60px;
+  background: var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .09 0 0 0 0 .09 0 0 0 0 .17 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.mono, td.n, .num { font-family: var(--mono); font-variation-settings: "wdth" 80; font-variant-numeric: tabular-nums; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; box-shadow: 0 0 0 5px var(--ink); }
+
+/* masthead */
+.mast { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--paper); display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; padding-block: 16px 12px; border-bottom: 2px solid var(--ink); }
+.brand { display: flex; align-items: baseline; gap: 10px; }
+.brand b { font: 800 26px/1 var(--display); letter-spacing: -.02em; }
+.brand b span { color: var(--blue); }
+.brand small { font-size: 13px; color: var(--ink2); }
+.tabs { display: flex; gap: 8px; }
+.tabs a { text-decoration: none; font: 600 14px var(--body); padding: 6px 14px; border: 2px solid var(--ink); border-radius: 999px; background: var(--card); box-shadow: 2px 2px 0 var(--ink); transition: transform .12s, box-shadow .12s; }
+.tabs a:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--ink); }
+.tabs a.on { background: var(--ink); color: var(--paper); box-shadow: 2px 2px 0 var(--pink); }
+.spacer { flex: 1; }
+.status { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; }
+.status i { width: 10px; height: 10px; border-radius: 50%; background: var(--ink3); border: 2px solid var(--ink); }
+.status.live i { background: var(--teal); animation: beat 1.6s infinite; }
+.status.down i { background: var(--pink); }
+@keyframes beat { 50% { transform: scale(1.35); } }
+.clock { font-size: 12px; color: var(--ink2); }
+
+/* ticker */
+.ticker { margin-top: 14px; background: var(--ink); color: var(--paper); border-radius: 10px; height: 40px; display: flex; align-items: center; overflow: hidden; position: relative; }
+.ticker::before { content: "Tape"; position: relative; z-index: 2; background: var(--sun); color: var(--ink); font: 700 12px var(--display); letter-spacing: .08em; text-transform: uppercase; padding: 0 12px; height: 100%; display: flex; align-items: center; }
+#tick { display: flex; gap: 22px; padding-left: 18px; white-space: nowrap; }
+.tk { font-size: 12.5px; display: inline-flex; gap: 6px; align-items: center; animation: slidein .45s cubic-bezier(.2, 1.4, .4, 1); }
+.tk .num { font-size: 12px; }
+.tk .b { color: #8fa9ff; } .tk .s { color: #ff8db4; }
+@keyframes slidein { from { transform: translateX(-30px); opacity: 0; } }
+
+/* panels */
+.panel { background: var(--card); border: 2px solid var(--ink); border-radius: 14px; box-shadow: 5px 5px 0 var(--ink); padding: 18px 20px; min-width: 0; }
+.row { display: grid; gap: 22px; margin-top: 22px; }
+.two { grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); }
+.split { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); }
+@media (max-width: 980px) { .split { grid-template-columns: minmax(0, 1fr); } }
+h2.q { font: 800 clamp(24px, 3.2vw, 34px)/1.1 var(--display); letter-spacing: -.02em; margin: 0 0 4px; text-wrap: balance; }
+h3 { font: 700 19px/1.2 var(--display); margin: 0 0 4px; }
+.dek { color: var(--ink2); margin: 0 0 14px; max-width: 62ch; font-size: 14px; }
+.eyebrow { font: 600 11px var(--body); text-transform: uppercase; letter-spacing: .1em; color: var(--ink3); }
+.scroll { overflow-x: auto; }
+.section-head { margin-top: 44px; }
+
+/* tables */
+table { width: 100%; border-collapse: collapse; white-space: nowrap; font-size: 13px; }
+th { text-align: right; font: 600 11px var(--body); text-transform: uppercase; letter-spacing: .06em; color: var(--ink3); padding: 8px 10px; border-bottom: 2px solid var(--ink); user-select: none; }
+th:first-child, td:first-child { text-align: left; }
+th[data-sort] { cursor: pointer; } th[data-sort]:hover { color: var(--ink); }
+th.sorted { color: var(--blue); }
+td { text-align: right; padding: 8px 10px; border-bottom: 1px solid var(--hair); }
+td.n { font-size: 12px; }
+#mkts tbody tr[data-c], #rTable tbody tr { cursor: pointer; transition: background .15s; }
+#mkts tbody tr[data-c]:hover, #rTable tbody tr:hover { background: var(--sun-t); }
+tbody tr.sel { background: var(--blue-t) !important; }
+tr.tier td { padding-top: 18px; border-bottom: none; font: 700 13px var(--display); color: var(--ink2); }
+tr.tier td i { display: inline-block; width: 12px; height: 12px; border: 2px solid var(--ink); border-radius: 3px; vertical-align: -1px; margin-right: 8px; }
+.chip { display: inline-block; font: 700 12px var(--display); padding: 2px 9px; border: 2px solid var(--ink); border-radius: 7px; letter-spacing: .01em; }
+.t-blue { background: var(--blue-t); } .t-sun { background: var(--sun-t); } .t-pink { background: var(--pink-t); } .t-teal { background: var(--teal-t); }
+.dex { color: var(--ink3); font-size: 11px; margin-left: 5px; }
+.pos { color: var(--blue); } .neg { color: var(--pink-ink); }
+.up { background: var(--blue-t); border-radius: 4px; } .down { background: var(--pink-t); border-radius: 4px; }
+.trunc { color: var(--amber); font-weight: 600; }
+.pill { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 11.5px; }
+.pill.pos { background: var(--blue-t); } .pill.neg { background: var(--pink-t); }
+.tug { display: inline-block; width: 64px; height: 10px; border: 1.5px solid var(--ink); border-radius: 5px; position: relative; vertical-align: middle; overflow: hidden; background: var(--card); }
+.tug::after { content: ""; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1.5px; background: var(--ink); }
+.tug b { position: absolute; top: 0; bottom: 0; }
+
+/* detail */
+.dhead { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px 20px; margin-bottom: 14px; }
+.dcoin { font: 800 44px/0.95 var(--display); letter-spacing: -.03em; margin: 0; }
+.dmid { font-size: 22px; }
+.stats { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.stat { border: 2px solid var(--ink); border-radius: 10px; padding: 6px 12px; background: var(--card); }
+.stat span { display: block; font-size: 11px; color: var(--ink3); }
+.stat b { font: 500 14px var(--mono); font-variation-settings: "wdth" 80; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--ink2); margin: 6px 0; }
+.legend i { display: inline-block; width: 12px; height: 12px; border: 2px solid var(--ink); border-radius: 3px; vertical-align: -2px; margin-right: 6px; }
+.chart { position: relative; }
+.chart svg { display: block; overflow: visible; }
+.axis text { fill: var(--ink3); font: 10px var(--mono); font-variation-settings: "wdth" 80; }
+.grid-l { stroke: var(--hair); stroke-dasharray: 2 4; }
+.tape { max-height: 520px; overflow-y: auto; }
+.side { display: inline-block; font: 700 11px var(--display); padding: 1px 8px; border-radius: 6px; border: 1.5px solid var(--ink); }
+.side.b { background: var(--blue); color: #fff; } .side.s { background: var(--pink); color: #fff; }
+.addr { color: var(--ink2); text-decoration: none; } a.addr:hover { color: var(--blue); text-decoration: underline; }
+.muted { color: var(--ink3); }
+.twins { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 16px; }
+.twin { border: 2px dashed var(--ink); border-radius: 12px; padding: 14px 16px; }
+.twin .big { font: 800 32px var(--display); letter-spacing: -.02em; }
+.meter { height: 12px; border: 2px solid var(--ink); border-radius: 6px; background: var(--card); overflow: hidden; margin: 4px 0 10px; }
+.meter b { display: block; height: 100%; transition: width .6s cubic-bezier(.2, 1, .3, 1); }
+
+/* research */
+.lede { font: 700 clamp(26px, 3.6vw, 42px)/1.15 var(--display); letter-spacing: -.02em; max-width: 30ch; margin: 34px 0 8px; text-wrap: balance; }
+.lede em { font-style: normal; padding: 0 6px; border-radius: 6px; }
+.lede .h1 { background: var(--sun); } .lede .h2 { background: var(--blue-t); } .lede .h3 { background: var(--pink-t); } .lede .h4 { background: var(--teal-t); }
+.ledesub { color: var(--ink2); max-width: 65ch; margin: 0; }
+.notes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 18px; }
+@media (max-width: 900px) { .notes { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .notes { grid-template-columns: minmax(0, 1fr); } }
+.note { border: 2px solid var(--ink); border-radius: 12px; padding: 14px 16px 16px; box-shadow: 4px 4px 0 var(--ink); transform: rotate(var(--r, 0deg)); transition: transform .2s cubic-bezier(.2, 1.4, .4, 1), box-shadow .2s; }
+.note:hover { transform: rotate(0) translate(-2px, -3px); box-shadow: 7px 8px 0 var(--ink); }
+.note .big { font: 800 34px/1 var(--display); letter-spacing: -.02em; display: block; margin-bottom: 6px; }
+.note p { margin: 0; font-size: 14px; }
+.coinpick { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+.coinpick button { font: 700 13px var(--display); padding: 5px 14px; border: 2px solid var(--ink); border-radius: 999px; background: var(--card); color: var(--ink); cursor: pointer; box-shadow: 2px 2px 0 var(--ink); transition: transform .12s, box-shadow .12s; }
+.coinpick button:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--ink); }
+.coinpick button:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--ink); }
+.coinpick button.on { background: var(--sun); }
+.coinpick button.thin { opacity: .55; }
+.three { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+.method { margin: 0; padding-left: 18px; color: var(--ink2); font-size: 14px; display: grid; gap: 6px; }
+#tDq td { white-space: normal; }
+.empty { color: var(--ink2); padding: 50px 0; text-align: center; font-size: 16px; }
+
+/* indexer */
+.syncbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; margin-top: 22px; }
+.syncbar .status { font-size: 14px; }
+.syncbar label { font-size: 12px; color: var(--ink3); display: flex; align-items: center; gap: 8px; }
+.syncbar input { font: 12px var(--mono); font-variation-settings: "wdth" 80; border: 2px solid var(--ink); border-radius: 8px; padding: 5px 8px; background: var(--card); color: var(--ink); width: min(320px, 70vw); }
+.progress { flex: 1 1 200px; height: 14px; border: 2px solid var(--ink); border-radius: 7px; background: var(--card); overflow: hidden; }
+.progress b { display: block; height: 100%; background: repeating-linear-gradient(45deg, var(--teal) 0 8px, #3fbfa6 8px 16px); transition: width .6s; }
+.ixk { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr)); gap: 14px; margin-top: 18px; }
+.ixk div { border: 2px solid var(--ink); border-radius: 12px; padding: 10px 14px; background: var(--card); }
+.ixk span { font-size: 12px; color: var(--ink3); display: block; }
+.ixk b { font: 800 26px var(--display); letter-spacing: -.02em; }
+.examples { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.examples button, .btn { font: 600 13px var(--body); padding: 6px 12px; border: 2px solid var(--ink); border-radius: 999px; background: var(--card); color: var(--ink); cursor: pointer; box-shadow: 2px 2px 0 var(--ink); transition: transform .12s, box-shadow .12s; }
+.examples button:hover, .btn:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--ink); background: var(--sun-t); }
+.examples button:active, .btn:active { transform: translate(2px, 2px); box-shadow: none; }
+.btn.go { background: var(--pink); color: #fff; font: 700 15px var(--display); padding: 8px 20px; }
+.btn.go:hover { background: var(--pink); }
+.btn[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+#gq { width: 100%; min-height: 220px; resize: vertical; font: 13px/1.6 var(--mono); font-variation-settings: "wdth" 85; color: #e8e9f3; background: var(--ink); border: 2px solid var(--ink); border-radius: 12px; padding: 14px 16px; tab-size: 2; }
+#gq:focus-visible { outline: 3px solid var(--sun); box-shadow: none; }
+.runrow { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 12px; }
+.runrow .spacer { flex: 1; }
+.err { border: 2px solid var(--ink); background: var(--pink-t); border-radius: 12px; padding: 12px 14px; font-size: 14px; }
+.err pre { font: 12px var(--mono); white-space: pre-wrap; margin: 8px 0 0; }
+.jsonv { font: 12px/1.5 var(--mono); font-variation-settings: "wdth" 85; background: var(--ink); color: #e8e9f3; border-radius: 12px; padding: 14px; max-height: 520px; overflow: auto; margin: 0; }
+.bars { display: grid; gap: 7px; }
+.bars div { display: grid; grid-template-columns: minmax(90px, 200px) 1fr auto; gap: 10px; align-items: center; font-size: 13px; }
+.bars span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bars i { display: block; height: 18px; border: 1.5px solid var(--ink); border-radius: 4px; background: var(--sun); min-width: 3px; transition: width .5s cubic-bezier(.2, 1, .3, 1); }
+.bars div:nth-child(3n+2) i { background: var(--blue); } .bars div:nth-child(3n) i { background: var(--pink); }
+#ixOut table td { max-width: 320px; overflow: hidden; text-overflow: ellipsis; }
+
+/* floating */
+.tip { position: fixed; pointer-events: none; background: var(--ink); color: var(--paper); border-radius: 8px; padding: 7px 10px; font: 11px/1.5 var(--mono); font-variation-settings: "wdth" 80; z-index: 40; box-shadow: 3px 3px 0 var(--pink); }
+#toasts { position: fixed; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 10px; z-index: 30; width: min(340px, calc(100vw - 36px)); }
+.toast { border: 2px solid var(--ink); border-radius: 12px; padding: 10px 14px; box-shadow: 4px 4px 0 var(--ink); font-size: 14px; animation: pop .5s cubic-bezier(.2, 1.5, .4, 1); }
+.toast.b { background: var(--blue-t); } .toast.s { background: var(--pink-t); }
+.toast .eyebrow { color: var(--ink2); }
+@keyframes pop { from { transform: translateY(20px) scale(.9); opacity: 0; } }
+.foot { color: var(--ink3); font-size: 12px; margin-top: 30px; max-width: 90ch; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<header class="mast">
+  <div class="brand"><b>HL<span>/</span>liquidity</b><small>who makes the market on Hyperliquid, and who wins</small></div>
+  <nav class="tabs" aria-label="View"><a href="#live" data-tab="live">Live</a><a href="#research" data-tab="research">Research</a><a href="#indexer" data-tab="indexer">Indexer</a></nav>
+  <span class="spacer"></span>
+  <span id="conn" class="status"><i></i><span>connecting</span></span>
+  <span class="clock mono" id="clock"></span>
+</header>
+
+<main id="tab-live">
+  <div class="ticker" aria-label="Recent trades across all coins"><div id="tick"></div></div>
+
+  <section class="panel" style="margin-top:22px">
+    <h2 class="q">The board</h2>
+    <p class="dek">14 markets, streamed straight from Hyperliquid. Pick a row to open its book. Click a column to sort.</p>
+    <div class="scroll"><table id="mkts">
+      <thead><tr>
+        <th>Coin</th><th data-sort="mark">Price</th><th data-sort="chg">24h</th>
+        <th data-sort="spread">Spread bps</th><th>Last 5 min</th>
+        <th data-sort="d0">Depth ±2bps</th><th data-sort="d1">±10bps</th><th data-sort="d2">±50bps</th>
+        <th data-sort="imb">Bid vs ask</th><th data-sort="fund">Funding APR</th><th data-sort="basis">Basis bps</th>
+        <th data-sort="oi">Open int.</th><th data-sort="vol">24h vol</th>
+      </tr></thead>
+      <tbody></tbody>
+    </table></div>
+  </section>
+
+  <div class="row split">
+    <section class="panel">
+      <div class="dhead"><h2 class="dcoin" id="dCoin">BTC</h2><span class="dmid num" id="dMid">—</span></div>
+      <div class="stats" id="tiles"></div>
+      <div class="legend"><span><i style="background:var(--blue)"></i>Bids, cumulative $</span><span><i style="background:var(--pink)"></i>Asks, cumulative $</span><span class="muted">x = bps from mid · refreshes every ~5s</span></div>
+      <div class="chart" id="depth"></div>
+      <div class="legend" style="margin-top:18px"><span><i style="background:var(--blue)"></i>Spread in bps, one sample a second</span></div>
+      <div class="chart" id="spreadChart"></div>
+    </section>
+    <section class="panel">
+      <h3>Trades</h3>
+      <p class="dek">Who crossed the spread (taker) and who got filled (maker).</p>
+      <div class="tape scroll"><table id="tape"><thead><tr><th>Time</th><th>Side</th><th>Price</th><th>Size</th><th>Taker</th><th>Maker</th></tr></thead><tbody></tbody></table></div>
+    </section>
+  </div>
+
+  <section class="panel" style="margin-top:22px">
+    <h2 class="q">One S&amp;P 500, two venues</h2>
+    <p class="dek">xyz and mkts both list the index as builder-deployed markets. Same underlying, so any gap in spread or depth comes from the venue.</p>
+    <div class="twins" id="cmp"></div>
+  </section>
+
+  <p class="foot">Public read-only feeds from api.hyperliquid.xyz. Spread and bid/ask balance use <span class="mono">bbo</span> (about 10 updates a second). Depth uses <span class="mono">l2Book</span>, which Hyperliquid caps at 20 levels a side and about one update every 5.4s. A <span class="trunc">≥</span> means the book ran out before that band, so the figure is a floor. Maker and taker come from the order of <span class="mono">users[]</span> (docs/API_FINDINGS.md, V1).</p>
+</main>
+
+<main id="tab-research" hidden>
+  <p class="lede" id="rLede"></p>
+  <p class="ledesub" id="rLedeSub"></p>
+
+  <section class="section-head">
+    <h2 class="q">Every coin, side by side</h2>
+    <p class="dek">Time-weighted over the hours the collector was up. Faded rows have under an hour of history, so read them as noise for now.</p>
+    <div class="panel"><div class="scroll"><table id="rTable"></table></div></div>
+  </section>
+
+  <div class="coinpick" id="rPick" role="group" aria-label="Coin"></div>
+  <div class="notes" id="rFind"></div>
+
+  <section class="section-head">
+    <h2 class="q">Who's trading on information?</h2>
+    <p class="dek">A markout tracks where the mid went after each fill. If takers keep winning, the makers who filled them were picked off.</p>
+    <div class="row two" style="margin-top:0">
+      <div class="panel"><h3>Markout curve</h3><p class="dek">bps, weighted by notional. Above zero is good for that side.</p><div class="chart" id="cMarkout"></div></div>
+      <div class="panel"><h3>Biggest takers</h3><p class="dek">A positive 60s markout means the price kept moving their way after they traded.</p><div class="scroll"><table id="tTakers"></table></div></div>
+    </div>
+  </section>
+
+  <section class="section-head">
+    <h2 class="q">Who makes the market?</h2>
+    <p class="dek">Every trade names both wallets, so we can see how much of the book a handful of desks provide, and how their fills age.</p>
+    <div class="row two" style="margin-top:0">
+      <div class="panel"><h3>How concentrated is it?</h3><p class="dek">Share of all notional done by the top N wallets.</p><div class="chart" id="cLorenz"></div></div>
+      <div class="panel"><h3>Maker league table</h3><p class="dek">P&amp;L per fill against the mid 5s and 60s later, in bps, before fees and rebates.</p><div class="scroll"><table id="tMakers"></table></div></div>
+    </div>
+  </section>
+
+  <section class="section-head">
+    <h2 class="q">What does a big order cost?</h2>
+    <p class="dek">Fills from one taker in the same millisecond are one order sweeping the book. Impact is that order's average price against the mid just before it.</p>
+    <div class="panel"><div class="row two" style="margin-top:0">
+      <div class="chart" id="cImpact"></div>
+      <div class="scroll"><table id="tBuckets"></table></div>
+    </div></div>
+  </section>
+
+  <section class="section-head">
+    <h2 class="q">When is the book thickest?</h2>
+    <p class="dek">Averaged by hour of day in UTC. Hours the collector missed are left blank.</p>
+    <div class="panel"><div class="row three" style="margin-top:0">
+      <div><h3>Spread</h3><p class="dek">bps, time-weighted</p><div class="chart" id="cHSpread"></div></div>
+      <div><h3 id="cHDepthL">Depth</h3><p class="dek">median $ within the band</p><div class="chart" id="cHDepth"></div></div>
+      <div><h3>Volume</h3><p class="dek">taker $ per hour of uptime</p><div class="chart" id="cHVol"></div></div>
+    </div></div>
+  </section>
+
+  <section class="section-head">
+    <h2 class="q">What does it cost to hold a position?</h2>
+    <p class="dek">Hourly averages of funding (annualised) and the premium of mark over oracle.</p>
+    <div class="panel"><div class="row two" style="margin-top:0">
+      <div><h3>Funding APR</h3><div class="chart" id="cFunding"></div></div>
+      <div><h3>Premium</h3><div class="chart" id="cPremium"></div></div>
+    </div></div>
+  </section>
+
+  <section class="section-head">
+    <h2 class="q">Can you trust these numbers?</h2>
+    <div class="row two" style="margin-top:0">
+      <div class="panel"><h3>Collector health</h3><div class="scroll"><table id="tDq"></table></div></div>
+      <div class="panel"><h3>How it's measured</h3>
+        <ul class="method">
+          <li>A collector records the raw feeds (<span class="mono">bbo</span>, <span class="mono">l2Book</span>, <span class="mono">trades</span>, <span class="mono">activeAssetCtx</span>). <span class="mono">analytics/report.py</span> replays them every hour.</li>
+          <li>Maker and taker come from <span class="mono">users[]</span> plus the aggressor side, checked against <span class="mono">userFills.crossed</span>. Duplicate trades after a reconnect are dropped by <span class="mono">tid</span>.</li>
+          <li>The mid comes from <span class="mono">bbo</span>. If it goes quiet for over 60s the collector was down, and any markout touching that window is dropped.</li>
+          <li>Depth comes from the 20-level book. Bands it doesn't reach show as <span class="trunc">≥</span> floors.</li>
+          <li>Maker P&amp;L leaves out fees, rebates and inventory. It measures adverse selection, not profit.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<main id="tab-indexer" hidden>
+  <p class="lede">Ask the chain yourself. Every action a <em class="h4">HyperEVM contract</em> sends into <em class="h2">HyperCore</em>, indexed by Envio.</p>
+  <p class="ledesub">Smart contracts on HyperEVM can place orders, move USDC between spot and perps, stake, or bridge HYPE into HyperCore. The indexer in <span class="mono">indexer/</span> decodes every one of those calls. Write a GraphQL query below, or start from an example. These are requests: HyperCore can still reject an order, so none of this is a fill. The order book itself lives on HyperCore, which isn't EVM data, so trades and fills stay on the Live and Research tabs.</p>
+
+  <div class="syncbar">
+    <span id="ixConn" class="status"><i></i><span>checking indexer…</span></span>
+    <div class="progress" title="indexed block / chain head"><b id="ixBar" style="width:0%"></b></div>
+    <span class="mono" id="ixSync" style="font-size:12px"></span>
+    <label for="ixUrl">Endpoint <input id="ixUrl" spellcheck="false"></label>
+  </div>
+  <div class="ixk" id="ixKpis"></div>
+
+  <section class="panel" style="margin-top:22px">
+    <h2 class="q">Query</h2>
+    <p class="dek">Read-only GraphQL (Hasura). Filter with <span class="mono">where</span>, sort with <span class="mono">order_by</span>, page with <span class="mono">limit</span>/<span class="mono">offset</span>. <span class="mono">asset</span> is resolved to a coin name in the results.</p>
+    <div class="examples" id="ixEx"></div>
+    <label for="gq" class="eyebrow" style="display:block;margin-bottom:6px">GraphQL</label>
+    <textarea id="gq" spellcheck="false"></textarea>
+    <div class="runrow">
+      <button type="button" class="btn go" id="ixRun">Run query</button>
+      <span class="muted" style="font-size:12px">⌘/Ctrl + Enter</span>
+      <span class="spacer"></span>
+      <span class="muted mono" id="ixMeta" style="font-size:12px"></span>
+      <span role="group" aria-label="Result view" style="display:flex;gap:6px">
+        <button type="button" class="btn" data-view="table" aria-pressed="true">Table</button>
+        <button type="button" class="btn" data-view="chart" aria-pressed="false">Bars</button>
+        <button type="button" class="btn" data-view="json" aria-pressed="false">JSON</button>
+      </span>
+    </div>
+  </section>
+
+  <section class="panel" style="margin-top:22px">
+    <h3 id="ixTitle">Results</h3>
+    <div id="ixOut"><div class="empty">Pick an example or write a query, then run it.</div></div>
+  </section>
+</main>
+
+<div class="tip" id="tip" hidden></div>
+<div id="toasts" aria-live="polite"></div>
+<script src="report.js"></script>
+
+<script>
+const TIERS = [
+  ["Majors", "blue", ["BTC", "ETH", "SOL"]],
+  ["Mid caps", "sun", ["UNI", "LIT", "PUMP", "TAO", "ENA"]],
+  ["Long tail", "pink", ["RESOLV", "CELO", "GAS"]],
+  ["Builder markets (HIP-3)", "teal", ["xyz:SP500", "io:SNDK", "mkts:US500"]],
+];
+const COINS = TIERS.flatMap(t => t[2]);
+const TIER = Object.fromEntries(TIERS.flatMap(([, c, cs]) => cs.map(x => [x, c])));
+const BANDS = [2, 10, 50];
+const HIST_S = 900, WHALE = 500_000;
+const S = Object.fromEntries(COINS.map(c => [c, { bbo: null, book: null, ctx: null, hist: [], lastHist: 0, trades: [], flash: 0, dir: 0 }]));
+let sel = "BTC", sortKey = null, ws, pending = [];
+const dirty = { any: true, tape: true, depth: true, spread: true };
+
+const $ = id => document.getElementById(id);
+const usd = v => v == null || !isFinite(v) ? "—" : "$" + (v >= 1e9 ? (v / 1e9).toFixed(2) + "B" : v >= 1e6 ? (v / 1e6).toFixed(2) + "M" : v >= 1e3 ? (v / 1e3).toFixed(1) + "K" : v.toFixed(0));
+const px = v => v == null ? "—" : v >= 1000 ? v.toLocaleString(undefined, { maximumFractionDigits: 1 }) : v >= 1 ? v.toFixed(3) : v.toPrecision(4);
+const sgn = (v, d = 2, suf = "") => v == null || !isFinite(v) ? "—" : `<span class="${v >= 0 ? "pos" : "neg"}">${v >= 0 ? "+" : ""}${v.toFixed(d)}${suf}</span>`;
+const short = a => a ? a.slice(0, 6) + "…" + a.slice(-4) : "—";
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const addr = a => a ? `<a class="addr mono" href="https://hypurrscan.io/address/${esc(a)}" target="_blank" rel="noopener" title="${esc(a)}">${short(a)}</a>` : "—";
+const chip = c => { const [dex, sym] = c.includes(":") ? c.split(":") : [null, c]; return `<span class="chip t-${TIER[c] ?? "blue"}">${esc(sym)}</span>${dex ? `<span class="dex">${esc(dex)}</span>` : ""}`; };
+
+// ---- metrics ----
+function mid(c) {
+  const b = S[c].bbo;
+  return b ? (b.bid + b.ask) / 2 : S[c].ctx ? S[c].ctx.midPx : null;
+}
+function depth(c) {
+  // $ within ±bps of mid. The 20-level book ending inside a band makes it a floor.
+  const bk = S[c].book, m = mid(c);
+  if (!bk || !m) return null;
+  return BANDS.map(bps => {
+    let sum = 0, trunc = false;
+    for (const lv of bk) {
+      for (const l of lv) if (Math.abs(l.px - m) / m * 1e4 <= bps) sum += l.px * l.sz;
+      if (lv.length && Math.abs(lv.at(-1).px - m) / m * 1e4 < bps) trunc = true;
+    }
+    return { sum, trunc };
+  });
+}
+function row(c) {
+  const s = S[c], x = s.ctx, b = s.bbo, m = mid(c), d = depth(c);
+  return {
+    mark: x ? x.markPx : null,
+    chg: x ? (x.markPx / x.prevDayPx - 1) * 100 : null,
+    spread: b ? (b.ask - b.bid) / m * 1e4 : null,
+    d, d0: d?.[0].sum, d1: d?.[1].sum, d2: d?.[2].sum,
+    imb: b ? (b.bsz - b.asz) / (b.bsz + b.asz) : null,
+    fund: x ? x.funding * 24 * 365 * 100 : null, // hourly rate -> APR %
+    basis: x ? (x.markPx / x.oraclePx - 1) * 1e4 : null,
+    oi: x ? x.openInterest * x.markPx : null,
+    vol: x ? x.dayNtlVlm : null,
+  };
+}
+
+// ---- ws ----
+function connect() {
+  ws = new WebSocket("wss://api.hyperliquid.xyz/ws");
+  ws.onopen = () => {
+    setConn("live", "live");
+    for (const c of COINS) for (const t of ["bbo", "l2Book", "activeAssetCtx", "trades"]) sub(t, c);
+  };
+  ws.onmessage = e => onMsg(JSON.parse(e.data));
+  ws.onclose = () => { setConn("down", "reconnecting"); setTimeout(connect, 2000); };
+  // keepalive: server drops idle sockets after 60s
+  clearInterval(connect.ping);
+  connect.ping = setInterval(() => ws.readyState === 1 && ws.send('{"method":"ping"}'), 30000);
+}
+function sub(type, coin) {
+  if (ws?.readyState === 1) ws.send(JSON.stringify({ method: "subscribe", subscription: { type, coin } }));
+}
+function setConn(cls, text) { $("conn").className = "status " + cls; $("conn").lastElementChild.textContent = text; }
+
+function onMsg({ channel, data }) {
+  if (channel === "bbo") {
+    const [b, a] = data.bbo, s = S[data.coin];
+    if (!b || !a || !s) return;
+    s.bbo = { bid: +b.px, ask: +a.px, bsz: +b.sz, asz: +a.sz };
+    const now = Date.now();
+    if (now - s.lastHist >= 1000) {
+      s.lastHist = now;
+      s.hist.push([now, (s.bbo.ask - s.bbo.bid) / ((s.bbo.ask + s.bbo.bid) / 2) * 1e4]);
+      while (s.hist.length && s.hist[0][0] < now - HIST_S * 1000) s.hist.shift();
+      if (data.coin === sel) dirty.spread = true;
+    }
+  } else if (channel === "l2Book" && S[data.coin]) {
+    S[data.coin].book = data.levels.map(side => side.map(l => ({ px: +l.px, sz: +l.sz, n: l.n })));
+    if (data.coin === sel) dirty.depth = true;
+  } else if (channel === "activeAssetCtx" && S[data.coin]) {
+    const s = S[data.coin], prev = s.ctx?.markPx;
+    s.ctx = Object.fromEntries(Object.entries(data.ctx).map(([k, v]) => [k, Array.isArray(v) ? v : +v]));
+    if (prev && s.ctx.markPx !== prev) { s.flash = Date.now() + 700; s.dir = Math.sign(s.ctx.markPx - prev); }
+  } else if (channel === "trades" && Array.isArray(data)) {
+    for (const t of data) {
+      const s = S[t.coin];
+      if (!s || s.trades.some(x => x.tid === t.tid)) continue; // reconnect snapshots repeat trades
+      s.trades.unshift(t);
+      if (s.trades.length > 120) s.trades.pop();
+      if (Date.now() - t.time < 10_000) {
+        pending.push(t);
+        if (t.px * t.sz >= WHALE) whale(t);
+      }
+      if (t.coin === sel) dirty.tape = true;
+    }
+  }
+  dirty.any = true;
+}
+const who = t => { const buy = t.side === "B", [b, s] = t.users || []; return { buy, taker: buy ? b : s, maker: buy ? s : b }; };
+
+// ---- ticker + whale toasts ----
+function flushTicker() {
+  if (!pending.length) return;
+  const top = pending.filter(t => t.px * t.sz >= 1000).sort((a, b) => b.px * b.sz - a.px * a.sz).slice(0, 3);
+  pending = [];
+  const box = $("tick");
+  for (const t of top.reverse()) {
+    const el = document.createElement("span"), buy = t.side === "B";
+    el.className = "tk";
+    el.innerHTML = `<b>${esc(t.coin.split(":").pop())}</b><span class="${buy ? "b" : "s"}">${buy ? "bought" : "sold"}</span><span class="num">${usd(t.px * t.sz)}</span><span class="num" style="opacity:.6">@ ${px(+t.px)}</span>`;
+    box.prepend(el);
+  }
+  while (box.children.length > 40) box.lastChild.remove();
+}
+function whale(t) {
+  const { buy, taker } = who(t), el = document.createElement("div");
+  el.className = "toast " + (buy ? "b" : "s");
+  el.innerHTML = `<div class="eyebrow">Whale · ${esc(t.coin)}</div>Someone ${buy ? "bought" : "sold"} <b class="num">${usd(t.px * t.sz)}</b> at <span class="num">${px(+t.px)}</span><div class="muted" style="font-size:12px">taker ${addr(taker)}</div>`;
+  const box = $("toasts");
+  box.append(el);
+  while (box.children.length > 3) box.firstChild.remove();
+  setTimeout(() => el.remove(), 7000);
+}
+
+// ---- chart kit (shared by live + research) ----
+const INK3 = "#74758c";
+function frame(el, h, P = { l: 58, r: 14, t: 12, b: 26 }) {
+  return { W: Math.max(260, el.clientWidth || 520), H: h, P };
+}
+function yScale(vals, H, P, zero = true) {
+  const v = vals.filter(x => x != null && isFinite(x));
+  let lo = Math.min(...v, zero ? 0 : Infinity), hi = Math.max(...v, zero ? 0 : -Infinity);
+  if (!isFinite(lo)) lo = 0, hi = 1;
+  if (lo === hi) hi = lo + 1;
+  const pad = (hi - lo) * .08; if (lo < 0 || !zero) lo -= pad; hi += pad;
+  return { lo, hi, Y: y => H - P.b - (y - lo) / (hi - lo) * (H - P.t - P.b) };
+}
+function yAxis(W, P, s, fmt) {
+  let g = '<g class="axis">';
+  for (let i = 0; i <= 4; i++) {
+    const v = s.lo + (s.hi - s.lo) * i / 4;
+    g += `<line class="grid-l" x1="${P.l}" x2="${W - P.r}" y1="${s.Y(v)}" y2="${s.Y(v)}"/><text x="${P.l - 8}" y="${s.Y(v) + 3}" text-anchor="end">${fmt(v)}</text>`;
+  }
+  if (s.lo < 0 && s.hi > 0) g += `<line x1="${P.l}" x2="${W - P.r}" y1="${s.Y(0)}" y2="${s.Y(0)}" stroke="var(--ink)" stroke-width="1.5"/>`;
+  return g + "</g>";
+}
+function hover(svg, n, xOf, html, mark) {
+  svg.onmousemove = e => {
+    const x = e.offsetX;
+    let i = 0;
+    for (let k = 1; k < n; k++) if (Math.abs(xOf(k) - x) < Math.abs(xOf(i) - x)) i = k;
+    mark(i); tip(e, html(i));
+  };
+  svg.onmouseleave = () => { $("tip").hidden = true; mark(-1); };
+}
+function tip(e, html) {
+  const t = $("tip"); t.innerHTML = html; t.hidden = false;
+  t.style.left = Math.min(e.clientX + 16, innerWidth - t.offsetWidth - 8) + "px"; t.style.top = e.clientY + 16 + "px";
+}
+
+// line chart; `time` = numeric x, else categorical. End labels when series <= 3.
+function lineChart(el, { x, series, h = 230, yfmt = v => v.toFixed(2), xfmt = v => v, time = false, zero = true, area = false }) {
+  const labels = series.length > 1 && series.length <= 3;
+  const { W, H, P } = frame(el, h, { l: 58, r: labels ? 104 : 14, t: 12, b: 26 }), n = x.length;
+  const X = time ? (v => P.l + (v - x[0]) / ((x[n - 1] - x[0]) || 1) * (W - P.l - P.r))
+                 : (v => P.l + (n === 1 ? .5 : x.indexOf(v) / (n - 1)) * (W - P.l - P.r));
+  const s = yScale(series.flatMap(q => q.v), H, P, zero);
+  let g = yAxis(W, P, s, yfmt);
+  const ticks = time ? [0, .25, .5, .75, 1].map(f => x[Math.round(f * (n - 1))]) : x;
+  g += '<g class="axis">' + [...new Set(ticks)].map(v => `<text x="${X(v)}" y="${H - 7}" text-anchor="${X(v) > W - P.r - 30 ? "end" : X(v) < P.l + 20 ? "start" : "middle"}">${xfmt(v)}</text>`).join("") + "</g>";
+  const ends = [];
+  for (const q of series) {
+    let d = "", pen = false, last = null;
+    q.v.forEach((v, i) => { if (v == null) { pen = false; return; } d += `${pen ? "L" : "M"}${X(x[i]).toFixed(1)},${s.Y(v).toFixed(1)}`; pen = true; last = i; });
+    if (area && last != null) g += `<path d="${d}V${s.Y(Math.max(s.lo, 0))}H${X(x[q.v.findIndex(v => v != null)])}Z" fill="${q.color}" fill-opacity=".14"/>`;
+    g += `<path d="${d}" fill="none" stroke="${q.color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+    if (n <= 12) g += q.v.map((v, i) => v == null ? "" : `<circle cx="${X(x[i])}" cy="${s.Y(v)}" r="4.5" fill="${q.color}" stroke="var(--card)" stroke-width="2"/>`).join("");
+    else if (last != null) g += `<circle cx="${X(x[last])}" cy="${s.Y(q.v[last])}" r="4.5" fill="${q.color}" stroke="var(--ink)" stroke-width="1.5"/>`;
+    if (last != null) ends.push({ q, y: s.Y(q.v[last]), x: X(x[last]) });
+  }
+  if (labels) { // nudge end labels apart so converging lines stay readable
+    ends.sort((a, b) => a.y - b.y);
+    for (let i = 1; i < ends.length; i++) ends[i].y = Math.max(ends[i].y, ends[i - 1].y + 15);
+    g += ends.map(e => `<g><rect x="${e.x + 10}" y="${e.y - 5}" width="9" height="9" rx="2" fill="${e.q.color}" stroke="var(--ink)" stroke-width="1.2"/><text x="${e.x + 24}" y="${e.y + 3.5}" fill="var(--ink)" font-size="11.5" font-family="Instrument Sans, system-ui, sans-serif" font-weight="600">${esc(e.q.name)}</text></g>`).join("");
+  }
+  const legend = series.length > 1 ? `<div class="legend">${series.map(q => `<span><i style="background:${q.color}"></i>${esc(q.name)}</span>`).join("")}</div>` : "";
+  el.innerHTML = legend + `<svg width="${W}" height="${H}" role="img" aria-label="${esc(series.map(q => q.name).join(", "))} chart">${g}<line class="xh" y1="${P.t}" y2="${H - P.b}" stroke="var(--ink)" stroke-dasharray="3 3" visibility="hidden"/></svg>`;
+  const svg = el.querySelector("svg"), xh = svg.querySelector(".xh");
+  hover(svg, n, i => X(x[i]),
+    i => `${xfmt(x[i])}<br>` + series.map(q => `<span style="color:${q.color}">■</span> ${esc(q.name)}: ${q.v[i] == null ? "—" : yfmt(q.v[i])}`).join("<br>"),
+    i => { if (i < 0) return xh.setAttribute("visibility", "hidden"); xh.setAttribute("x1", X(x[i])); xh.setAttribute("x2", X(x[i])); xh.setAttribute("visibility", "visible"); });
+}
+
+function barChart(el, { labels, v, color = "var(--blue)", h = 190, yfmt = v => v.toFixed(2), tipfmt }) {
+  const { W, H, P } = frame(el, h), n = labels.length;
+  const s = yScale(v, H, P), bw = (W - P.l - P.r) / n, gap = Math.max(2, Math.min(8, bw * .22));
+  let g = yAxis(W, P, s, yfmt);
+  const every = Math.ceil(n / Math.max(1, Math.floor((W - P.l) / 36)));
+  g += '<g class="axis">' + labels.map((l, i) => i % every ? "" : `<text x="${P.l + bw * (i + .5)}" y="${H - 7}" text-anchor="middle">${l}</text>`).join("") + "</g>";
+  g += v.map((y, i) => {
+    if (y == null) return "";
+    const y0 = s.Y(0), y1 = s.Y(y), top = Math.min(y0, y1), ht = Math.max(1, Math.abs(y1 - y0));
+    return `<rect class="b" data-i="${i}" x="${P.l + bw * i + gap / 2}" y="${top}" width="${bw - gap}" height="${ht}" rx="3" fill="${color}" stroke="var(--ink)" stroke-width="1.5"/>`;
+  }).join("");
+  el.innerHTML = `<svg width="${W}" height="${H}" role="img" aria-label="bar chart">${g}</svg>`;
+  const svg = el.querySelector("svg"), rects = [...svg.querySelectorAll("rect.b")];
+  hover(svg, n, i => P.l + bw * (i + .5), i => tipfmt ? tipfmt(i) : `${labels[i]}: ${v[i] == null ? "—" : yfmt(v[i])}`,
+    i => rects.forEach(r => r.setAttribute("fill-opacity", i < 0 || +r.dataset.i === i ? 1 : .35)));
+}
+
+function table(el, head, rows) {
+  el.innerHTML = `<thead><tr>${head.map(h => `<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r => `<tr>${r.map((c, i) => `<td class="${i ? "n" : ""}">${c}</td>`).join("")}</tr>`).join("")}</tbody>`;
+}
+
+// ---- live render ----
+function spark(h) {
+  const pts = h.filter(p => p[0] >= Date.now() - 300000);
+  if (pts.length < 2) return "";
+  const w = 90, ht = 22, t0 = pts[0][0], span = Date.now() - t0 || 1;
+  const vs = pts.map(p => p[1]), lo = Math.min(...vs), hi = Math.max(...vs);
+  const P = pts.map(p => [((p[0] - t0) / span * (w - 4)).toFixed(1), (ht - 3 - (p[1] - lo) / (hi - lo || 1) * (ht - 6)).toFixed(1)]);
+  return `<svg width="${w}" height="${ht}" style="display:inline-block;vertical-align:middle"><path d="M${P.join("L")}" fill="none" stroke="var(--blue)" stroke-width="1.6" stroke-linejoin="round"/><circle cx="${P.at(-1)[0]}" cy="${P.at(-1)[1]}" r="2.5" fill="var(--pink)" stroke="var(--ink)" stroke-width="1"/></svg>`;
+}
+const depthCell = (d, i) => !d ? "—" : (d[i].trunc ? '<span class="trunc" title="the 20-level book ends inside this band, so this is a floor">≥</span>' : "") + usd(d[i].sum);
+function tug(imb) {
+  if (imb == null) return "—";
+  const w = Math.abs(imb) * 50;
+  return `<span class="tug" title="${imb >= 0 ? "bid" : "ask"}-heavy at the touch (${imb.toFixed(2)})"><b style="${imb >= 0 ? `right:50%;width:${w}%;background:var(--blue)` : `left:50%;width:${w}%;background:var(--pink)`}"></b></span>`;
+}
+function renderTable() {
+  const rows = Object.fromEntries(COINS.map(c => [c, row(c)])), now = Date.now();
+  const groups = sortKey ? [["Sorted by " + document.querySelector(`th[data-sort="${sortKey}"]`).textContent, "sun", [...COINS].sort((a, b) => (rows[b][sortKey] ?? -Infinity) - (rows[a][sortKey] ?? -Infinity))]] : TIERS;
+  let html = "";
+  for (const [name, color, coins] of groups) {
+    html += `<tr class="tier"><td colspan="13"><i style="background:var(--${color})"></i>${esc(name)}</td></tr>`;
+    for (const c of coins) {
+      const r = rows[c], s = S[c], fl = s.flash > now ? (s.dir > 0 ? "up" : "down") : "";
+      html += `<tr data-c="${esc(c)}" class="${c === sel ? "sel" : ""}">
+        <td>${chip(c)}</td>
+        <td class="n"><span class="${fl}" style="padding:1px 4px">${px(r.mark)}</span></td><td class="n">${sgn(r.chg, 2, "%")}</td>
+        <td class="n">${r.spread == null ? "—" : r.spread.toFixed(2)}</td><td>${spark(s.hist)}</td>
+        <td class="n">${depthCell(r.d, 0)}</td><td class="n">${depthCell(r.d, 1)}</td><td class="n">${depthCell(r.d, 2)}</td>
+        <td>${tug(r.imb)}</td><td class="n">${r.fund == null ? "—" : `<span class="pill ${r.fund >= 0 ? "pos" : "neg"}">${r.fund >= 0 ? "+" : ""}${r.fund.toFixed(1)}%</span>`}</td>
+        <td class="n">${sgn(r.basis, 1)}</td><td class="n">${usd(r.oi)}</td><td class="n">${usd(r.vol)}</td></tr>`;
+    }
+  }
+  $("mkts").tBodies[0].innerHTML = html;
+  document.querySelectorAll("#mkts th[data-sort]").forEach(th => th.classList.toggle("sorted", th.dataset.sort === sortKey));
+}
+
+function renderDetail() {
+  const r = row(sel), x = S[sel].ctx, m = mid(sel);
+  $("dCoin").innerHTML = esc(sel);
+  $("dMid").textContent = px(m);
+  const imp = x?.impactPxs && m ? (x.impactPxs[1] - x.impactPxs[0]) / m * 1e4 : null;
+  $("tiles").innerHTML = [
+    ["Spread", r.spread == null ? "—" : r.spread.toFixed(2) + " bps"],
+    ["Impact spread", imp == null ? "—" : imp.toFixed(2) + " bps"],
+    ["Funding APR", sgn(r.fund, 2, "%")],
+    ["Premium", x ? sgn(x.premium * 1e4, 2, " bps") : "—"],
+    ["Open interest", usd(r.oi)],
+    ["24h volume", usd(r.vol)],
+  ].map(([k, v]) => `<div class="stat"><span>${k}</span><b>${v}</b></div>`).join("");
+  if (dirty.depth) { drawDepth(); dirty.depth = false; }
+  if (dirty.spread) { drawSpread(); dirty.spread = false; }
+}
+
+function drawDepth() {
+  const el = $("depth"), bk = S[sel].book, m = mid(sel);
+  if (!bk || !m) { el.innerHTML = '<div class="empty">Waiting for the first order book snapshot. They arrive about every 5 seconds.</div>'; return; }
+  const { W, H, P } = frame(el, 250);
+  const cum = side => { let s = 0; return bk[side].map(l => (s += l.px * l.sz, { bps: (l.px - m) / m * 1e4, v: s, l })); };
+  const bids = cum(0), asks = cum(1);
+  const xMax = Math.max(.5, ...[...bids, ...asks].map(p => Math.abs(p.bps)));
+  const yMax = Math.max(1, bids.at(-1)?.v ?? 0, asks.at(-1)?.v ?? 0);
+  const X = b => P.l + (b + xMax) / (2 * xMax) * (W - P.l - P.r);
+  const s = { lo: 0, hi: yMax, Y: v => H - P.b - v / yMax * (H - P.t - P.b) };
+  const step = (pts, dir) => { let d = `M${X(0)},${s.Y(0)}`; for (const p of pts) d += `H${X(p.bps)}V${s.Y(p.v)}`; return d + `H${X(dir * xMax)}`; };
+  const area = (pts, dir, col) => pts.length ? `<path d="${step(pts, dir)}V${s.Y(0)}Z" fill="${col}" fill-opacity=".28" style="mix-blend-mode:multiply"/><path d="${step(pts, dir)}" fill="none" stroke="${col}" stroke-width="2.5"/>` : "";
+  let g = yAxis(W, P, s, usd) + '<g class="axis">';
+  for (const b of [-xMax, -xMax / 2, 0, xMax / 2, xMax]) g += `<text x="${X(b)}" y="${H - 7}" text-anchor="middle">${b > 0 ? "+" : ""}${b.toFixed(1)}</text>`;
+  g += "</g>" + BANDS.filter(b => b <= xMax).flatMap(b => [-b, b]).map(b => `<line x1="${X(b)}" x2="${X(b)}" y1="${P.t}" y2="${H - P.b}" stroke="var(--amber)" stroke-dasharray="4 3"/>`).join("");
+  el.innerHTML = `<svg width="${W}" height="${H}" role="img" aria-label="Order book depth for ${esc(sel)}">${g}${area(bids, -1, "var(--blue)")}${area(asks, 1, "var(--pink)")}<line class="xh" y1="${P.t}" y2="${H - P.b}" stroke="var(--ink)" stroke-dasharray="3 3" visibility="hidden"/></svg>`;
+  const svg = el.querySelector("svg"), xh = svg.querySelector(".xh");
+  svg.onmousemove = e => {
+    const bps = (e.offsetX - P.l) / (W - P.l - P.r) * 2 * xMax - xMax, pts = bps < 0 ? bids : asks;
+    const hit = [...pts].reverse().find(p => Math.abs(p.bps) <= Math.abs(bps)) ?? pts[0];
+    if (!hit) return;
+    xh.setAttribute("x1", X(hit.bps)); xh.setAttribute("x2", X(hit.bps)); xh.setAttribute("visibility", "visible");
+    tip(e, `${bps < 0 ? "Bid" : "Ask"} ${px(hit.l.px)} · ${hit.bps.toFixed(2)} bps<br>this level ${usd(hit.l.px * hit.l.sz)} from ${hit.l.n} orders<br>cumulative ${usd(hit.v)}`);
+  };
+  svg.onmouseleave = () => { $("tip").hidden = true; xh.setAttribute("visibility", "hidden"); };
+}
+function drawSpread() {
+  const h = S[sel].hist;
+  if (h.length < 3) { $("spreadChart").innerHTML = '<div class="empty" style="padding:24px 0">Collecting a few seconds of spread…</div>'; return; }
+  lineChart($("spreadChart"), { x: h.map(p => p[0]), time: true, h: 150, area: true, series: [{ name: "Spread", color: "var(--blue)", v: h.map(p => p[1]) }],
+    yfmt: v => v.toFixed(2), xfmt: t => { const s = Math.round((Date.now() - t) / 1000); return s < 5 ? "now" : s < 60 ? `-${s}s` : `-${Math.round(s / 60)}m`; } });
+}
+
+function renderTape() {
+  $("tape").tBodies[0].innerHTML = S[sel].trades.map(t => {
+    const { buy, taker, maker } = who(t);
+    return `<tr><td class="n muted">${new Date(t.time).toISOString().slice(11, 19)}</td>
+      <td><span class="side ${buy ? "b" : "s"}">${buy ? "BUY" : "SELL"}</span></td><td class="n">${px(+t.px)}</td>
+      <td class="n">${usd(t.px * t.sz)}</td><td>${addr(taker)}</td><td>${addr(maker)}</td></tr>`;
+  }).join("") || '<tr><td colspan="6" class="muted">Waiting for the next trade…</td></tr>';
+}
+
+function renderCmp() {
+  const pair = ["xyz:SP500", "mkts:US500"].map(c => ({ c, r: row(c) }));
+  const maxD = Math.max(1, ...pair.map(p => p.r.d?.[1].sum ?? 0)), maxS = Math.max(.01, ...pair.map(p => p.r.spread ?? 0));
+  $("cmp").innerHTML = pair.map(({ c, r }, i) => `<div class="twin">
+    <div>${chip(c)}</div>
+    <div class="big num" style="margin-top:8px">${r.spread == null ? "—" : r.spread.toFixed(2)}<small style="font-size:14px"> bps spread</small></div>
+    <div class="meter"><b style="width:${(r.spread ?? 0) / maxS * 100}%;background:var(--pink)"></b></div>
+    <div class="eyebrow">Depth within ±10 bps: <span class="num" style="color:var(--ink)">${depthCell(r.d, 1)}</span></div>
+    <div class="meter"><b style="width:${(r.d?.[1].sum ?? 0) / maxD * 100}%;background:var(--blue)"></b></div>
+    <div class="muted" style="font-size:13px">24h volume ${usd(r.vol)} · open interest ${usd(r.oi)}</div></div>`).join("");
+}
+
+$("mkts").addEventListener("pointerdown", e => {
+  const th = e.target.closest("th[data-sort]");
+  if (th) { sortKey = sortKey === th.dataset.sort ? null : th.dataset.sort; dirty.any = true; return; }
+  const tr = e.target.closest("tr[data-c]");
+  if (!tr || tr.dataset.c === sel || e.target.closest("a")) return;
+  sel = tr.dataset.c;
+  dirty.any = dirty.tape = dirty.depth = dirty.spread = true;
+});
+// ponytail: full table re-render at 4 Hz, fine for 14 rows; diff rows if the universe grows.
+setInterval(() => {
+  $("clock").textContent = new Date().toISOString().slice(11, 19) + " UTC";
+  if ($("tab-live").hidden) return;
+  flushTicker();
+  if (dirty.any) { renderTable(); renderDetail(); renderCmp(); dirty.any = false; }
+  if (dirty.tape) { renderTape(); dirty.tape = false; }
+}, 250);
+connect();
+
+// ================= Research =================
+const C1 = "#2f5bea", C2 = "#f0437f", C3 = "#c78a00"; // validated all-pairs on #eef0f5
+const R = window.REPORT;
+let rsel = null;
+const bps = (v, d = 2) => v == null ? "—" : v.toFixed(d);
+const pct = v => v == null ? "—" : (v * 100).toFixed(1) + "%";
+const hr = h => String(h).padStart(2, "0");
+const depthStr = (d, i) => d.median[i] == null ? "—" : (d.trunc_rate[i] > .5 ? '<span class="trunc" title="most snapshots ran out of levels before this band">≥</span>' : "") + usd(d.median[i]);
+
+function renderResearch() {
+  if (!R || !Object.keys(R.coins).length) {
+    $("tab-research").innerHTML = `<div class="empty">No research report yet. Run <span class="mono">uv run --python 3.11 analytics/report.py</span> once the collector has some data.</div>`;
+    return;
+  }
+  const coins = COINS.filter(c => R.coins[c]).concat(Object.keys(R.coins).filter(c => !COINS.includes(c)));
+  rsel ??= coins[0];
+  const all = coins.map(c => R.coins[c].summary);
+  const hrs = Math.max(...all.map(s => s.span_h)), fills = all.reduce((a, s) => a + s.fills, 0), ntl = all.reduce((a, s) => a + s.notional, 0);
+  const busiest = coins.reduce((a, c) => R.coins[c].makers.n > R.coins[a].makers.n ? c : a), up = Math.min(...all.map(s => s.coverage));
+  $("rLede").innerHTML = `Over <em class="h1">${hrs.toFixed(0)} hours</em> we watched <em class="h2">${fills.toLocaleString()} fills</em> worth <em class="h3">${usd(ntl)}</em> trade across ${coins.length} markets. On ${esc(busiest)} alone, <em class="h4">${R.coins[busiest].makers.n.toLocaleString()} wallets</em> made the market.`;
+  $("rLedeSub").innerHTML = `Collector uptime was ${pct(up)} on the longest-running coins, and the gaps are left out of every figure. Report built ${new Date(R.generated_at).toISOString().slice(0, 16).replace("T", " ")} UTC, rebuilt hourly.`;
+
+  const b = R.coins[coins[0]].depth.bands;
+  table($("rTable"), ["Coin", "Hours", "Uptime", "Spread bps", ...b.map(x => `Depth ±${x}bps`), "Book reach bps", "Makers", "Top-5 makers", "Maker HHI", "Taker 60s", "Impact ≥$100K"],
+    coins.map(c => {
+      const r = R.coins[c], s = r.summary, big = r.size_buckets.filter(q => q.lo >= 1e5 && q.impact_bps != null);
+      const imp = big.length ? big.reduce((a, q) => a + q.impact_bps * q.share, 0) / big.reduce((a, q) => a + q.share, 0) : null;
+      return [chip(c), s.span_h.toFixed(1), pct(s.coverage), bps(s.tw_spread_bps, 3),
+        ...b.map((_, i) => depthStr(r.depth, i)), bps(r.depth.reach_bps), r.makers.n.toLocaleString(), pct(r.makers.top5), r.makers.hhi.toFixed(0),
+        sgn(r.markout.taker[r.horizons.indexOf(60)], 2), bps(imp)];
+    }));
+  [...$("rTable").tBodies[0].rows].forEach((tr, i) => {
+    tr.dataset.rc = coins[i];
+    if (coins[i] === rsel) tr.className = "sel";
+    if (R.coins[coins[i]].summary.span_h < 1) tr.style.opacity = .45;
+  });
+  $("rPick").innerHTML = coins.map(c => `<button type="button" data-rc="${esc(c)}" class="${c === rsel ? "on" : ""} ${R.coins[c].summary.span_h < 1 ? "thin" : ""}" aria-pressed="${c === rsel}">${esc(c)}</button>`).join("");
+  renderCoin(R.coins[rsel]);
+}
+
+function renderCoin(r) {
+  const s = r.summary, H = r.horizons, i60 = H.indexOf(60);
+  const hx = H.map(h => h < 60 ? h + "s" : h / 60 + "m");
+  const big = r.size_buckets.at(-1), small = r.size_buckets[0];
+  const worst = [...r.makers.top].filter(m => m.pnl60 != null).sort((a, b) => a.pnl60 - b.pnl60)[0];
+  const mt = r.markout.taker[i60], top = r.markout.maker_top[i60], rest = r.markout.maker_rest[i60];
+  const notes = [
+    ["t-sun", pct(r.makers.top5), `of ${rsel} maker volume comes from just 5 wallets, out of ${r.makers.n.toLocaleString()} makers. HHI is ${r.makers.hhi.toFixed(0)}, and under 1,500 counts as unconcentrated.`],
+    mt != null && ["t-blue", `${mt >= 0 ? "+" : ""}${bps(mt)} bps`, mt >= 0 ? "Takers are informed. A minute after they trade, the price has moved their way by this much, even after paying the spread." : "Takers lose on average. A minute after they trade, the price has moved against them."],
+    top != null && rest != null && ["t-pink", `${bps(top)} vs ${bps(rest)}`, `bps after 60s for the ten biggest makers vs everyone else. ${top < rest ? "The big desks absorb more of the informed flow." : "The big desks dodge informed flow better than the rest."}`],
+    big.impact_bps != null && small.impact_bps != null && ["t-teal", `${bps(big.impact_bps)} bps`, `is what a $1M+ order pays against mid. Orders under $1K pay ${bps(small.impact_bps)}. Million-dollar orders are ${pct(big.share)} of volume.`],
+    ["t-sun", `${bps(r.depth.reach_bps)} bps`, "is as far from mid as the public 20-level book reaches. Liquidity deeper than that is invisible from the feed."],
+    worst && ["t-pink", `${bps(worst.pnl60)} bps`, `per fill after 60s for ${addr(worst.addr)}, the most picked-off of the big makers.`],
+  ].filter(Boolean);
+  const tilt = [-1.2, .8, -.5, 1.1, -.9, .6];
+  $("rFind").innerHTML = notes.map(([cls, bigv, text], i) => `<div class="note ${cls}" style="--r:${tilt[i % tilt.length]}deg"><span class="big">${bigv}</span><p>${text}</p></div>`).join("");
+
+  lineChart($("cMarkout"), { x: hx, series: [
+    { name: "Takers", color: C1, v: r.markout.taker },
+    { name: "Top-10 makers", color: C2, v: r.markout.maker_top },
+    { name: "Other makers", color: C3, v: r.markout.maker_rest },
+  ], yfmt: v => v.toFixed(2) });
+  table($("tTakers"), ["#", "Taker", "Share", "Orders", "60s markout"],
+    r.takers.top.map((m, i) => [i + 1, addr(m.addr), pct(m.share), m.orders.toLocaleString(), sgn(m.markout60)]));
+
+  lineChart($("cLorenz"), { x: r.makers.topn.map(p => p[0]), series: [
+    { name: "Makers", color: C1, v: r.makers.topn.map(p => p[1]) },
+    { name: "Takers", color: C2, v: r.takers.topn.map(p => p[1]) },
+  ], xfmt: k => k >= 1000 ? k / 1000 + "K" : k, yfmt: v => (v * 100).toFixed(0) + "%" });
+  table($("tMakers"), ["#", "Maker", "Share", "Fills", "P&L 5s", "P&L 60s"],
+    r.makers.top.map((m, i) => [i + 1, addr(m.addr), pct(m.share), m.fills.toLocaleString(), sgn(m.pnl5), sgn(m.pnl60)]));
+
+  const bl = ["<$1K", "$1-10K", "$10-100K", "$100K-1M", "≥$1M"];
+  barChart($("cImpact"), { labels: bl, v: r.size_buckets.map(q => q.impact_bps), color: "var(--sun)", h: 230,
+    tipfmt: i => `${bl[i]}<br>impact ${bps(r.size_buckets[i].impact_bps)} bps<br>${r.size_buckets[i].orders.toLocaleString()} orders · ${pct(r.size_buckets[i].share)} of $` });
+  table($("tBuckets"), ["Order size", "Orders", "Share of $", "Impact bps", "60s markout"],
+    r.size_buckets.map((q, i) => [bl[i], q.orders.toLocaleString(), pct(q.share), bps(q.impact_bps), sgn(q.markout60_bps)]));
+
+  const hl = [...Array(24).keys()].map(hr);
+  barChart($("cHSpread"), { labels: hl, v: r.hourly.spread, color: "var(--blue)", tipfmt: i => `${hl[i]}:00 UTC<br>${bps(r.hourly.spread[i], 3)} bps` });
+  $("cHDepthL").textContent = `Depth ±${r.depth.bands[1]} bps`;
+  barChart($("cHDepth"), { labels: hl, v: r.hourly.depth, color: "var(--teal)", yfmt: usd, tipfmt: i => `${hl[i]}:00 UTC<br>${usd(r.hourly.depth[i])}` });
+  barChart($("cHVol"), { labels: hl, v: r.hourly.vol_per_h, color: "var(--pink)", yfmt: usd, tipfmt: i => `${hl[i]}:00 UTC<br>${usd(r.hourly.vol_per_h[i])} an hour` });
+
+  if (r.funding.length > 1) {
+    const t = r.funding.map(q => q[0]), fx = v => new Date(v).toISOString().slice(5, 13).replace("T", " ") + "h";
+    lineChart($("cFunding"), { x: t, time: true, xfmt: fx, h: 170, area: true, series: [{ name: "Funding APR", color: C1, v: r.funding.map(q => q[1]) }], yfmt: v => v.toFixed(1) + "%" });
+    lineChart($("cPremium"), { x: t, time: true, xfmt: fx, h: 170, area: true, series: [{ name: "Premium", color: C2, v: r.funding.map(q => q[2]) }], yfmt: v => v.toFixed(2) + " bps" });
+  } else { $("cFunding").innerHTML = '<div class="empty">Needs at least two hours of data.</div>'; $("cPremium").innerHTML = ""; }
+
+  table($("tDq"), ["Check", "Result"], [
+    ["Capture window", `${s.span_h.toFixed(1)} h`],
+    ["Uptime", pct(s.coverage)],
+    ["Outages over 60s", `${s.gaps}, longest ${(s.longest_gap_s / 60).toFixed(0)} min`],
+    ["Order book cadence", `one snapshot every ${bps(s.l2_cadence_s)} s`],
+    ["Duplicate trades dropped", s.dup_fills.toLocaleString()],
+    ["Messages (bbo / book / trades / ctx)", ["bbo", "l2Book", "trades", "activeAssetCtx"].map(k => (s.msgs[k] ?? 0).toLocaleString()).join(" / ")],
+    ["Disconnects, all coins", `${R.ledger.disconnects} (${R.ledger.errors.map(([e, n]) => `${e} ${n}`).join(", ")})`],
+  ]);
+}
+
+document.addEventListener("click", e => {
+  const c = e.target.closest("[data-rc]")?.dataset.rc;
+  if (c && c !== rsel && !e.target.closest("a")) { rsel = c; renderResearch(); }
+});
+function showTab() {
+  const t = ["#research", "#indexer"].includes(location.hash) ? location.hash.slice(1) : "live";
+  $("tab-live").hidden = t !== "live"; $("tab-research").hidden = t !== "research"; $("tab-indexer").hidden = t !== "indexer";
+  if (t === "indexer") pollSync();
+  document.querySelectorAll(".tabs a").forEach(a => { a.classList.toggle("on", a.dataset.tab === t); a.setAttribute("aria-current", a.dataset.tab === t ? "page" : "false"); });
+  if (t === "research") renderResearch(); else dirty.any = dirty.depth = dirty.spread = dirty.tape = true;
+}
+// ================= Indexer (Envio HyperIndex over HyperEVM) =================
+const IX_DEFAULT = "http://localhost:8080/v1/graphql";
+const IX_EXAMPLES = [
+  ["What are contracts doing?", `query ActionMix {
+  ActionStat(order_by: {count: desc}) {
+    action
+    count
+    lastBlock
+  }
+}`],
+  ["Latest actions", `query Latest {
+  CoreAction(order_by: {block: desc}, limit: 25) {
+    timestamp
+    sender
+    action
+    asset
+    isBuy
+    market
+    limitPx
+    sz
+    tif
+    txHash
+  }
+}`],
+  ["Largest perp order requests", `query BigOrders {
+  CoreAction(
+    where: {actionId: {_eq: 1}, asset: {_lt: 10000}}
+    order_by: {notional: desc_nulls_last}
+    limit: 25
+  ) {
+    timestamp
+    sender
+    asset
+    isBuy
+    limitPx
+    sz
+    notional
+    tif
+    reduceOnly
+  }
+}`],
+  ["Most active contracts", `query TopSenders {
+  Sender(order_by: {actions: desc}, limit: 20) {
+    id
+    actions
+    orders
+    firstBlock
+    lastBlock
+  }
+}`],
+  ["BTC orders from contracts", `query BtcOrders {
+  CoreAction(
+    where: {actionId: {_eq: 1}, asset: {_eq: 0}}
+    order_by: {block: desc}
+    limit: 25
+  ) {
+    timestamp
+    sender
+    isBuy
+    limitPx
+    sz
+    notional
+    tif
+  }
+}`],
+  ["HYPE into HyperCore", `query HypeIn {
+  HypeDeposit(order_by: {amount: desc}, limit: 25) {
+    timestamp
+    user
+    amount
+    txHash
+  }
+}`],
+];
+const ixUrl = () => { try { return localStorage.getItem("ixUrl") || IX_DEFAULT; } catch { return IX_DEFAULT; } };
+let ixView = "table", ixLast = null;
+
+// Hasura sends Float/numeric columns as strings; turn plain decimals back into numbers.
+const NUMERIC = /^-?\d+(\.\d+)?(e[+-]?\d+)?$/i;
+const numify = v => Array.isArray(v) ? v.map(numify) : v && typeof v === "object" ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, numify(x)])) : typeof v === "string" && NUMERIC.test(v) && v.length < 25 ? Number(v) : v;
+async function gql(query) {
+  const res = await fetch(ixUrl(), { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ query }) });
+  if (!res.ok) throw new Error(`HTTP ${res.status} from ${ixUrl()}`);
+  return numify(await res.json());
+}
+
+// asset ids: perp index, 10000+i spot, 100000 + dex*10000 + i for HIP-3 (names from the public info API)
+const assetNames = new Map();
+let perpDexs = null;
+const hlInfo = body => fetch("https://api.hyperliquid.xyz/info", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) }).then(r => r.json());
+async function resolveAssets(ids) {
+  try {
+    if (!assetNames.size) (await hlInfo({ type: "meta" })).universe.forEach((u, i) => assetNames.set(i, u.name));
+    for (const id of new Set(ids)) {
+      if (id == null || assetNames.has(id)) continue;
+      if (id >= 100000) {
+        perpDexs ??= await hlInfo({ type: "perpDexs" });
+        const di = Math.floor((id - 100000) / 10000), dex = perpDexs[di]?.name;
+        if (dex) (await hlInfo({ type: "meta", dex })).universe.forEach((u, i) => assetNames.set(100000 + di * 10000 + i, u.name));
+      } else if (id >= 10000) assetNames.set(id, `spot #${id - 10000}`);
+      if (!assetNames.has(id)) assetNames.set(id, `#${id}`);
+    }
+  } catch { /* names are a nicety; raw ids still show */ }
+}
+
+const isAddr = v => typeof v === "string" && /^0x[0-9a-fA-F]{40}$/.test(v);
+const TIME_KEYS = /^(timestamp|lastTimestamp)$/, SKIP_CHART = /^(block|firstBlock|lastBlock|actionId|asset|timestamp|lastTimestamp|chainId)$/;
+function fmtCell(k, v) {
+  if (v == null) return '<span class="muted">—</span>';
+  if (k === "asset") return `${assetNames.has(v) ? chip(assetNames.get(v)) : ""} <span class="muted">${v}</span>`;
+  if (k === "market") return v ? '<span class="pill neg">market</span>' : '<span class="muted">limit</span>';
+  if (k === "isBuy") return `<span class="side ${v ? "b" : "s"}">${v ? "BUY" : "SELL"}</span>`;
+  if (k === "txHash") return `<a class="addr mono" href="https://hyperevmscan.io/tx/${esc(v)}" target="_blank" rel="noopener">${esc(v.slice(0, 10))}…</a>`;
+  if (isAddr(v)) return `<a class="addr mono" href="https://hyperevmscan.io/address/${esc(v)}" target="_blank" rel="noopener" title="${esc(v)}">${short(v)}</a>`;
+  if (TIME_KEYS.test(k) && typeof v === "number") return new Date(v * 1000).toISOString().slice(0, 19).replace("T", " ");
+  if (/notional/i.test(k) && typeof v === "number") return usd(v);
+  if (typeof v === "number") return v.toLocaleString(undefined, { maximumFractionDigits: 4 });
+  if (typeof v === "object") return `<span class="mono">${esc(JSON.stringify(v))}</span>`;
+  return esc(v);
+}
+
+function renderIx() {
+  const out = $("ixOut"), r = ixLast;
+  if (!r) return;
+  if (r.error) { out.innerHTML = r.error; return; }
+  const keys = Object.keys(r.data ?? {});
+  const key = keys.find(k => Array.isArray(r.data[k])) ?? keys[0];
+  const val = r.data?.[key], rows = Array.isArray(val) ? val : val ? [val] : [];
+  $("ixTitle").textContent = key ? `${key} · ${rows.length} row${rows.length === 1 ? "" : "s"}` : "Results";
+  const cols = [...new Set(rows.flatMap(o => Object.keys(o ?? {})))];
+  const label = cols.find(c => rows.some(o => typeof o[c] === "string")), value = cols.find(c => !SKIP_CHART.test(c) && rows.every(o => o[c] == null || typeof o[c] === "number"));
+  document.querySelector('[data-view="chart"]').disabled = !(label && value && rows.length > 1);
+  if (ixView === "json" || !rows.length) { out.innerHTML = rows.length ? `<pre class="jsonv">${esc(JSON.stringify(r.data, null, 2))}</pre>` : '<div class="empty">The query ran and returned no rows. If the indexer is still syncing, try again in a minute.</div>'; return; }
+  if (ixView === "chart" && label && value) {
+    const top = rows.slice(0, 40), max = Math.max(...top.map(o => o[value] ?? 0)) || 1;
+    out.innerHTML = `<p class="dek">${esc(value)} by ${esc(label)}${rows.length > 40 ? " (first 40 rows)" : ""}</p><div class="bars">${top.map(o => `<div><span title="${esc(o[label])}">${label === "asset" ? esc(assetNames.get(o[label]) ?? o[label]) : isAddr(o[label]) ? short(o[label]) : esc(o[label])}</span><i style="width:${(o[value] ?? 0) / max * 100}%"></i><span class="num">${fmtCell(value, o[value])}</span></div>`).join("")}</div>`;
+    return;
+  }
+  out.innerHTML = `<div class="scroll"><table><thead><tr>${cols.map(c => `<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${rows.map(o => `<tr>${cols.map((c, i) => `<td class="${i ? "n" : ""}">${fmtCell(c, o[c])}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+}
+
+async function runQuery() {
+  const q = $("gq").value.trim();
+  if (!q) return;
+  const btn = $("ixRun"), t0 = performance.now();
+  btn.disabled = true; btn.textContent = "Running…";
+  try {
+    const r = await gql(q);
+    if (r.errors?.length) ixLast = { error: `<div class="err"><b>The indexer rejected this query.</b> Check field names against the examples, or open the schema in <span class="mono">indexer/schema.graphql</span>.<pre>${esc(r.errors.map(e => e.message).join("\n"))}</pre></div>` };
+    else {
+      ixLast = { data: r.data };
+      const v = Object.values(r.data ?? {}).flatMap(x => Array.isArray(x) ? x : [x]);
+      if (v.some(o => o && "asset" in o)) await resolveAssets(v.map(o => o?.asset));
+    }
+    $("ixMeta").textContent = `${Math.round(performance.now() - t0)} ms`;
+  } catch (e) {
+    ixLast = { error: `<div class="err"><b>Couldn't reach the indexer at <span class="mono">${esc(ixUrl())}</span>.</b> Start it with <span class="mono">cd indexer && pnpm dev</span>, or change the endpoint above.<pre>${esc(e.message)}</pre></div>` };
+    $("ixMeta").textContent = "";
+  }
+  btn.disabled = false; btn.textContent = "Run query";
+  renderIx();
+}
+
+async function pollSync() {
+  if ($("tab-indexer").hidden) return;
+  try {
+    const r = await gql("{ _meta { progressBlock sourceBlock eventsProcessed isReady } Totals { actions orders marketOrders senders hypeDeposits hypeIn } }");
+    const m = r.data._meta[0], t = r.data.Totals[0];
+    const pct = m.sourceBlock > 0 ? Math.max(0, m.progressBlock) / m.sourceBlock * 100 : 0;
+    $("ixConn").className = "status " + (m.isReady ? "live" : "");
+    $("ixConn").lastElementChild.textContent = m.isReady ? "indexer live" : m.sourceBlock > 0 ? "indexer syncing" : "indexer up, not fetching";
+    $("ixBar").style.width = pct.toFixed(1) + "%";
+    $("ixSync").textContent = m.sourceBlock > 0 ? `block ${Math.max(0, m.progressBlock).toLocaleString()} of ${m.sourceBlock.toLocaleString()} · ${m.eventsProcessed.toLocaleString()} events` : "waiting for HyperSync (is ENVIO_API_TOKEN set in indexer/.env?)";
+    $("ixKpis").innerHTML = [
+      ["Actions sent to Core", t?.actions], ["Orders requested", t?.orders], ["Market orders", t?.marketOrders],
+      ["Contracts & wallets", t?.senders], ["HYPE bridged in, all time", t && Math.round(t.hypeIn).toLocaleString()],
+    ].map(([k, v]) => `<div><span>${k}</span><b>${v == null ? "—" : typeof v === "number" ? v.toLocaleString() : v}</b></div>`).join("");
+  } catch {
+    $("ixConn").className = "status down";
+    $("ixConn").lastElementChild.textContent = "indexer offline";
+    $("ixSync").textContent = "run: cd indexer && pnpm dev";
+    $("ixBar").style.width = "0%";
+  }
+}
+
+$("ixEx").innerHTML = IX_EXAMPLES.map(([name], i) => `<button type="button" data-ex="${i}">${esc(name)}</button>`).join("");
+$("ixEx").addEventListener("click", e => { const b = e.target.closest("[data-ex]"); if (b) { $("gq").value = IX_EXAMPLES[b.dataset.ex][1]; runQuery(); } });
+$("gq").value = IX_EXAMPLES[0][1];
+$("ixRun").addEventListener("click", runQuery);
+$("gq").addEventListener("keydown", e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === "Enter") { e.preventDefault(); runQuery(); }
+  else if (e.key === "Tab" && !e.shiftKey) { e.preventDefault(); document.execCommand("insertText", false, "  "); }
+});
+document.querySelectorAll("[data-view]").forEach(b => b.addEventListener("click", () => {
+  ixView = b.dataset.view;
+  document.querySelectorAll("[data-view]").forEach(x => x.setAttribute("aria-pressed", x === b));
+  renderIx();
+}));
+$("ixUrl").value = ixUrl();
+$("ixUrl").addEventListener("change", e => { try { localStorage.setItem("ixUrl", e.target.value.trim() || IX_DEFAULT); } catch {} pollSync(); });
+setInterval(pollSync, 5000);
+
+addEventListener("hashchange", showTab);
+let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { $("tab-research").hidden ? (dirty.depth = dirty.spread = true) : renderResearch(); }, 150); });
+showTab();
+</script>
+</body>
+</html>
